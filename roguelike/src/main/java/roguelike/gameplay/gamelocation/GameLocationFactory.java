@@ -8,7 +8,7 @@ public class GameLocationFactory {
         for (int i = 0; i < height; ++i) {
             var line = new ArrayList<Character>();
             for (int k = 0; k < width; ++k) {
-                line.add('X');
+                line.add(i == 0 || i == (height - 1) || k == 0 || k == (width - 1) ? 'X' : ' ');
             }
             location.add(line);
         }
