@@ -3,7 +3,7 @@ package roguelike.appmanager;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import roguelike.context.Context;
-import roguelike.context.Gameworld;
+import roguelike.context.gameworld.Gameworld;
 import roguelike.context.MainMenu;
 
 import java.io.IOException;

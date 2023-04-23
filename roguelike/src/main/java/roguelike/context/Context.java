@@ -6,9 +6,9 @@ import com.googlecode.lanterna.terminal.Terminal;
 import java.io.IOException;
 
 public class Context {
-    Terminal terminal;
+    protected Terminal terminal;
 
-    Context(Terminal newTerminal) {
+    public Context(Terminal newTerminal) {
         terminal = newTerminal;
     }
     public KeyStroke getKey() throws IOException {
@@ -21,7 +21,7 @@ public class Context {
             ReturnToMainMenu,
         }
         private final EnumResult enumRes;
-        ReturnResult(EnumResult newEnumRes) {
+        public ReturnResult(EnumResult newEnumRes) {
             enumRes = newEnumRes;
         }
 
