@@ -1,9 +1,6 @@
 package roguelike.gameobjects;
 
 import com.googlecode.lanterna.TextCharacter;
-import org.w3c.dom.Text;
-
-import java.awt.*;
 
 public class GameObject {
     protected TextCharacter symb;
@@ -21,7 +18,7 @@ public class GameObject {
         yObject = y;
     }
 
-    public int getxObject() {
+    public int getX() {
         return xObject;
     }
 
@@ -29,7 +26,7 @@ public class GameObject {
         this.xObject = x;
     }
 
-    public int getyObject() {
+    public int getY() {
         return yObject;
     }
 

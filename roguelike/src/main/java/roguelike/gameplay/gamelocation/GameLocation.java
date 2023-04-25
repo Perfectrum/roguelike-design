@@ -1,18 +1,30 @@
 package roguelike.gameplay.gamelocation;
 
+import roguelike.gameobjects.GameObject;
+
 import java.util.ArrayList;
 
 public class GameLocation {
+
+    private ArrayList<GameObject> gameObjects;
     private int width ;
     private int height;
 
-    ArrayList<ArrayList<Character>> location;
+    private ArrayList<ArrayList<Character>> location;
 
-    GameLocation(int newWidth, int newHeight,
-                 ArrayList<ArrayList<Character>> newLocation) {
-            width = newWidth;
-            height = newHeight;
-            location = newLocation;
+    GameLocation(int width, int height,
+                 ArrayList<ArrayList<Character>> location) {
+        this.width = width;
+        this.height = height;
+        this.location = location;
+    }
+    GameLocation(int width, int height,
+                 ArrayList<ArrayList<Character>> location,
+                 ArrayList<GameObject> gameObjects) {
+        this.width = width;
+        this.height = height;
+        this.location = location;
+        this.gameObjects = gameObjects;
     }
     public int getWidth() {
         return width;
@@ -23,5 +35,9 @@ public class GameLocation {
 
     public char getCharAt(int x, int y) {
         return location.get(x).get(y);
+    }
+
+    public ArrayList<GameObject> getGameObjects() {
+        return gameObjects;
     }
 }

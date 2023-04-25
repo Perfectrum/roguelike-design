@@ -1,6 +1,5 @@
 package roguelike.context.gameworld;
 
-import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.Terminal;
@@ -25,20 +24,26 @@ public class Gameworld extends Context {
 
         private int rightX;
         private int downY;
-        private int height;
-        private int width;
-        public Scope(int newHeight, int newWidth) {
-            height = newHeight;
-            width = newWidth;
+        private int radiusY;
+        private int radiusX;
+        public Scope(int radiusX, int radiusY) {
+            this.radiusX = radiusX;
+            this.radiusY = radiusY;
+        }
+
+        private int clam(int a, int b, int c) {
+            return Math.min(Math.max(a, b), c);
         }
 
         public void actualizeScope() {
-            int radiusX = width / 2;
-            int radiusY = height / 2;
-            leftX = Math.max(0, player.getxObject() - radiusX);
-            upY = Math.max(0, player.getyObject() - radiusY);
-            rightX = Math.min(player.getxObject() + radiusX, gameLocation.getWidth());
-            downY = Math.min(player.getyObject() + radiusY, gameLocation.getHeight());
+            leftX = clam(0, player.getX() - radiusX,
+                    gameLocation.getWidth() - 2 * radiusX - 1);
+            rightX = clam(player.getX() + radiusX, 2 * radiusX,
+                    gameLocation.getWidth() - 1);
+            upY = clam(0, player.getY() - radiusY,
+                    gameLocation.getHeight() - 2 * radiusY - 1);
+            downY = clam(player.getY() + radiusY, 2 * radiusY,
+                    gameLocation.getHeight() - 1);
         }
     }
 
@@ -47,43 +52,56 @@ public class Gameworld extends Context {
     public Gameworld(Terminal newTerminal) throws IOException {
         super(newTerminal);
 
-        int radiusX = 30;
-        int radiusY = 30;
-        scope = new Scope(radiusX * 2 + 1, radiusY * 2 + 1);
+        int radiusX = 10;
+        int radiusY = 10;
+        scope = new Scope(radiusX, radiusY);
         screen = new TerminalScreen(terminal);
         drawer = new GameworldDrawer();
 
-        int playerX = 5;
-        int playerY = 5;
-        player = new PlayerCharacter(5, 5, new TextCharacter('@'));
+        int playerX = 1;
+        int playerY = 1;
+        player = new PlayerCharacter(1, 1, new TextCharacter('@'));
 
         screen.startScreen();
         screen.setCursorPosition(null);
 
         gameLocationFactory = new GameLocationFactory();
-        gameLocation = gameLocationFactory.createRectangularLocation(300, 300);
+        gameLocation = gameLocationFactory.createRectangularLocation(radiusX * 3, radiusY * 3);
     }
 
     public class GameworldDrawer {
         public GameworldDrawer () {}
         private void drawPlayer() {
-            screen.setCharacter(player.getxObject() - scope.leftX,
-                    player.getyObject() - scope.upY, new TextCharacter('@'));
+            screen.setCharacter(player.getX() - scope.leftX,
+                    player.getY() - scope.upY, new TextCharacter('@'));
         }
 
         private void drawScopeLocation() {
-            for (int y = 0; y < scope.height; ++y) {
-                for (int x = 0; x < scope.width; ++x) {
-                    screen.setCharacter(x, y, new TextCharacter(
-                            gameLocation.getCharAt(scope.leftX + x, scope.upY + y)));
+            for (int y = scope.upY; y <= scope.downY; ++y) {
+                for (int x = scope.leftX; x <= scope.rightX; ++x) {
+                    screen.setCharacter(
+                            x - scope.leftX, y - scope.upY,
+                            new TextCharacter(
+                            gameLocation.getCharAt(x, y)));
                 }
             }
+            /*
+            for (var gameObj: gameLocation.getGameObjects()) {
+                var x = gameObj.getX();
+                var y = gameObj.getY();
+                if (scope.leftX <= x && x <= scope.rightX &&
+                    scope.upY <= y && y <= scope.downY) {
+                    screen.setCharacter(x - scope.leftX,
+                            y - scope.downY, gameObj.getSymb());
+                }
+            }
+
+             */
         }
 
         public void drawWorld() throws IOException {
             terminal.clearScreen();
             screen.clear();
-            scope.actualizeScope();
 
             drawScopeLocation();
             drawPlayer();
@@ -96,6 +114,7 @@ public class Gameworld extends Context {
     GameworldDrawer drawer;
 
     public void drawWorld() throws IOException {
+        scope.actualizeScope();
         drawer.drawWorld();
     }
 
@@ -104,16 +123,16 @@ public class Gameworld extends Context {
                 0 <= y && y < gameLocation.getHeight() && gameLocation.getCharAt(x, y) != 'X';
     }
     private void playerLeftStep() {
-        player.setX(player.getxObject() - 1);
+        player.setX(player.getX() - 1);
     }
     private void playerRightStep() {
-        player.setX(player.getxObject() + 1);
+        player.setX(player.getX() + 1);
     }
     private void playerUpStep() {
-        player.setY(player.getyObject() - 1);
+        player.setY(player.getY() - 1);
     }
     private void playerDownStep() {
-        player.setY(player.getyObject() + 1);
+        player.setY(player.getY() + 1);
     }
 
     @Override
@@ -130,22 +149,22 @@ public class Gameworld extends Context {
                     return new ReturnResult(ReturnResult.EnumResult.ReturnToMainMenu);
                 }
                 case 'w', 'W' -> {
-                    if (isStepable(player.getxObject(), player.getyObject() - 1)) {
+                    if (isStepable(player.getX(), player.getY() - 1)) {
                         playerUpStep();
                     }
                 }
                 case 's', 'S' -> {
-                    if (isStepable(player.getxObject(), player.getyObject() + 1)) {
+                    if (isStepable(player.getX(), player.getY() + 1)) {
                         playerDownStep();
                     }
                 }
                 case 'a', 'A' -> {
-                    if (isStepable(player.getxObject() - 1, player.getyObject())) {
+                    if (isStepable(player.getX() - 1, player.getY())) {
                         playerLeftStep();
                     }
                 }
                 case 'd', 'D' -> {
-                    if (isStepable(player.getxObject() + 1, player.getyObject())) {
+                    if (isStepable(player.getX() + 1, player.getY())) {
                         playerRightStep();
                     }
                 }
