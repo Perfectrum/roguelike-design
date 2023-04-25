@@ -49,12 +49,30 @@ public class Gameworld extends Context {
 
     private Scope scope;
 
+    private int scopeRadiusX = 10;
+    private int scopeRadiusY = 10;
+
+    public int getScopeRadiusX() {
+        return scopeRadiusX;
+    }
+    public int getScopeRadiusY() {
+        return scopeRadiusY;
+    }
+
+    public void changeLocation(GameLocation gameLocation) {
+        this.gameLocation = gameLocation;
+    }
+
+    public void setPlayerXY(int x, int y) {
+        player.setX(x);
+        player.setY(y);
+    }
+
     public Gameworld(Terminal newTerminal) throws IOException {
         super(newTerminal);
 
-        int radiusX = 10;
-        int radiusY = 10;
-        scope = new Scope(radiusX, radiusY);
+
+        scope = new Scope(scopeRadiusX, scopeRadiusY);
         screen = new TerminalScreen(terminal);
         drawer = new GameworldDrawer();
 
@@ -66,14 +84,15 @@ public class Gameworld extends Context {
         screen.setCursorPosition(null);
 
         gameLocationFactory = new GameLocationFactory();
-        gameLocation = gameLocationFactory.createRectangularLocation(radiusX * 3, radiusY * 3);
+        gameLocation = gameLocationFactory.createRectangularLocationWithEntrance
+                (scopeRadiusX * 3, scopeRadiusY * 3);
     }
 
     public class GameworldDrawer {
         public GameworldDrawer () {}
         private void drawPlayer() {
             screen.setCharacter(player.getX() - scope.leftX,
-                    player.getY() - scope.upY, new TextCharacter('@'));
+                    player.getY() - scope.upY, player.getSymb());
         }
 
         private void drawScopeLocation() {
@@ -85,18 +104,18 @@ public class Gameworld extends Context {
                             gameLocation.getCharAt(x, y)));
                 }
             }
-            /*
+            if (gameLocation.getGameObjects() == null) {
+                return;
+            }
             for (var gameObj: gameLocation.getGameObjects()) {
                 var x = gameObj.getX();
                 var y = gameObj.getY();
                 if (scope.leftX <= x && x <= scope.rightX &&
                     scope.upY <= y && y <= scope.downY) {
                     screen.setCharacter(x - scope.leftX,
-                            y - scope.downY, gameObj.getSymb());
+                            y - scope.upY, gameObj.getSymb());
                 }
             }
-
-             */
         }
 
         public void drawWorld() throws IOException {
@@ -168,8 +187,21 @@ public class Gameworld extends Context {
                         playerRightStep();
                     }
                 }
+                case 'e', 'E' -> {
+                    for (var gameObject: gameLocation.getGameObjects()) {
+                        if (gameObject.getX() == player.getX() &&
+                                gameObject.getY() == player.getY()) {
+                            gameObject.interact(this);
+                            System.out.println("interact called");
+                        }
+                    }
+                }
             }
             drawWorld();
         }
+    }
+
+    public GameLocationFactory getGameLocationFactory() {
+        return gameLocationFactory;
     }
 }

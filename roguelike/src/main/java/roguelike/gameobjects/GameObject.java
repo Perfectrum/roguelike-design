@@ -1,6 +1,7 @@
 package roguelike.gameobjects;
 
 import com.googlecode.lanterna.TextCharacter;
+import roguelike.context.gameworld.Gameworld;
 
 public class GameObject {
     protected TextCharacter symb;
@@ -16,6 +17,9 @@ public class GameObject {
 
     public void setyObject(int y) {
         yObject = y;
+    }
+
+    public void interact(Gameworld gameworld) {
     }
 
     public int getX() {
