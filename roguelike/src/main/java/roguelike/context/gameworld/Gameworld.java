@@ -163,9 +163,10 @@ public class Gameworld extends Context {
 
         gameLocationFactory = new GameLocationFactory(gameObjectFactory);
         gameLocation = gameLocationFactory.
-                createRandomLinesGameLocation(5 * scopeRadiusX, 4 * scopeRadiusY);
+                createRandomLinesGameLocation(5 * scopeRadiusX, 6 * scopeRadiusY);
         player = gameObjectFactory.createPlayerCharacter(0, 0);
         gameLocation.setPlayerFreeCell(player);
+        inventoryMenu = new InventoryMenu(player.getInventory());
 
         scope = new Scope(scopeRadiusX, scopeRadiusY);
         screen = new TerminalScreen(terminal);
@@ -188,37 +189,51 @@ public class Gameworld extends Context {
 
     private boolean inInventoryMenu = false;
     private int firstItem = 0;
-    private void runInventory() throws IOException {
-        firstItem = 0;
-        drawWorld();
 
-        while (true) {
-            var keyStroke = getKey();
-            int scrollSize = 10;
-            if (keyStroke == null) {
-                continue;
-            }
-            switch (keyStroke) {
-                case 'i', 'I' -> {
-                    inInventoryMenu = false;
-                    return;
-                }
-                case 'p', 'P' -> {
-                    firstItem = Math.max(0, firstItem - scrollSize);
-                }
-                case 'n', 'N' -> {
-                    firstItem = firstItem + scrollSize;
-                }
-            }
-            if (Character.isDigit(keyStroke)) {
-                int ind = firstItem + (keyStroke - '0');
-                if (ind < player.getInventory().getItems().size()) {
-                    player.getInventory().getItem(ind).useByPlayer(player);
-                }
-            }
+    public class InventoryMenu {
+        private PlayerCharacter.Inventory inventory;
+        public InventoryMenu(PlayerCharacter.Inventory inventory) {
+            this.inventory = inventory;
+        }
+        public void runInventory() throws IOException {
+            firstItem = 0;
             drawWorld();
+
+            while (true) {
+                var keyStroke = getKey();
+                int scrollSize = 10;
+                if (keyStroke == null) {
+                    continue;
+                }
+                switch (keyStroke) {
+                    case 'i', 'I' -> {
+                        inInventoryMenu = false;
+                        return;
+                    }
+                    case 'p', 'P' -> {
+                        firstItem = Math.max(0, firstItem - scrollSize);
+                    }
+                    case 'n', 'N' -> {
+                        firstItem = firstItem + scrollSize;
+                    }
+                }
+                if (Character.isDigit(keyStroke)) {
+                    int ind = firstItem + (keyStroke - '0');
+                    if (ind < inventory.getItems().size()) {
+                        inventory.getItem(ind).useByPlayer(player);
+                    }
+                }
+                drawWorld();
+            }
         }
     }
+
+    private final InventoryMenu inventoryMenu;
+
+    private void runInventory() throws IOException {
+        inventoryMenu.runInventory();
+    }
+
     @Override
     public ReturnResult run() throws InterruptedException, IOException {
         Thread.yield();
@@ -257,7 +272,7 @@ public class Gameworld extends Context {
                         if (gameObject.getX() == player.getX() &&
                                 gameObject.getY() == player.getY()) {
                             gameObject.interact(this);
-                            System.out.println("interact called");
+                            System.out.println("interact");
                             /* важный брейк, взаимодействие только с
                              * 1 обжектом делаем это первый аргумент,
                              * второй - лут удаляется себя и итерация
