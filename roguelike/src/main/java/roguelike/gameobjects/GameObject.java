@@ -4,6 +4,7 @@ import com.googlecode.lanterna.TextCharacter;
 import roguelike.context.gameworld.Gameworld;
 
 public class GameObject {
+    protected int id;
     protected TextCharacter symb;
     protected int xObject;
     protected int yObject;

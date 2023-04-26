@@ -3,14 +3,20 @@ package roguelike.gameobjects.items;
 import roguelike.gameobjects.PlayerCharacter;
 
 public class Item {
-    String description;
+    protected String description = "";
 
+    public Item() {
+    }
+
+    public String getDescription() {
+        return description;
+    }
     public void equip(PlayerCharacter playerCharacter) {
     }
 
     public void unEquip(PlayerCharacter playerCharacter) {
     }
     Item(String description) {
-        description = description;
+        this.description = description;
     }
 }

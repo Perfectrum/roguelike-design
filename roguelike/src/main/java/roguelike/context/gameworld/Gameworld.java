@@ -1,9 +1,9 @@
 package roguelike.context.gameworld;
 
-import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.Terminal;
 import roguelike.context.Context;
+import roguelike.gameobjects.GameObjectFactory;
 import roguelike.gameobjects.PlayerCharacter;
 import roguelike.gameplay.gamelocation.GameLocation;
 import roguelike.gameplay.gamelocation.GameLocationFactory;
@@ -11,17 +11,37 @@ import roguelike.gameplay.gamelocation.GameLocationFactory;
 import java.io.IOException;
 
 public class Gameworld extends Context {
-    private GameLocationFactory gameLocationFactory;
+    private final GameObjectFactory gameObjectFactory;
+    private final GameLocationFactory gameLocationFactory;
+
+    public GameLocationFactory getGameLocationFactory() {
+        return gameLocationFactory;
+    }
     private GameLocation gameLocation;
 
-    private TerminalScreen screen;
+    public GameLocation getGameLocation() {
+        return gameLocation;
+    }
+    public void setGameLocation(GameLocation gameLocation) {
+        this.gameLocation = gameLocation;
+    }
 
-    private PlayerCharacter player;
+    private final TerminalScreen screen;
+
+    private final PlayerCharacter player;
+
+    public PlayerCharacter getPlayer() {
+        return player;
+    }
+
+    public void setPlayerXY(int x, int y) {
+        player.setX(x);
+        player.setY(y);
+    }
 
     class Scope {
         private int leftX;
         private int upY;
-
         private int rightX;
         private int downY;
         private final int radiusY;
@@ -61,66 +81,30 @@ public class Gameworld extends Context {
         return scopeRadiusY;
     }
 
-    public GameLocation getGameLocation() {
-        return gameLocation;
-    }
-
-    public void changeLocation(GameLocation gameLocation) {
-        this.gameLocation = gameLocation;
-    }
-
-    public void setPlayerXY(int x, int y) {
-        player.setX(x);
-        player.setY(y);
-    }
-
-    public Gameworld(Terminal newTerminal) throws IOException {
-        super(newTerminal);
-
-        scope = new Scope(scopeRadiusX, scopeRadiusY);
-        screen = new TerminalScreen(terminal);
-        drawer = new GameworldDrawer();
-
-        int playerX = 1;
-        int playerY = 1;
-        player = new PlayerCharacter(1, 1, new TextCharacter('@'));
-
-        screen.startScreen();
-        screen.setCursorPosition(null);
-
-        gameLocationFactory = new GameLocationFactory();
-        gameLocation = gameLocationFactory.createRectangularLocationWithEntrance
-                (scopeRadiusX, scopeRadiusY * 4);
-    }
-
     public class GameworldDrawer {
         public GameworldDrawer () {}
-        private void drawPlayer() {
-            screen.setCharacter(player.getX() - scope.leftX,
-                    player.getY() - scope.upY, player.getSymb());
-        }
 
         private void drawScopeLocation() {
             for (int x = scope.leftX; x <= scope.rightX; ++x){
-                 {for (int y = scope.upY; y <= scope.downY; ++y)
-                     screen.setCharacter(
+                {for (int y = scope.upY; y <= scope.downY; ++y)
+                    screen.setCharacter(
                             x - scope.leftX, y - scope.upY,
-                            new TextCharacter(
-                            gameLocation.getCharAt(x, y)));
+                                    gameLocation.getTextCharAt(x, y));
                 }
-            }
-            if (gameLocation.getGameObjects() == null) {
-                return;
             }
             for (var gameObj: gameLocation.getGameObjects()) {
                 var x = gameObj.getX();
                 var y = gameObj.getY();
                 if (scope.leftX <= x && x <= scope.rightX &&
-                    scope.upY <= y && y <= scope.downY) {
+                        scope.upY <= y && y <= scope.downY) {
                     screen.setCharacter(x - scope.leftX,
                             y - scope.upY, gameObj.getSymb());
                 }
             }
+        }
+        private void drawPlayer() {
+            screen.setCharacter(player.getX() - scope.leftX,
+                    player.getY() - scope.upY, player.getSymb());
         }
 
         public void drawWorld() throws IOException {
@@ -134,9 +118,26 @@ public class Gameworld extends Context {
             Thread.yield();
         }
     }
-
     GameworldDrawer drawer;
 
+    public Gameworld(Terminal newTerminal) throws IOException {
+        super(newTerminal);
+
+        scope = new Scope(scopeRadiusX, scopeRadiusY);
+        screen = new TerminalScreen(terminal);
+        screen.startScreen();
+        screen.setCursorPosition(null);
+
+        drawer = new GameworldDrawer();
+
+        gameObjectFactory = new GameObjectFactory();
+
+        gameLocationFactory = new GameLocationFactory(gameObjectFactory);
+        gameLocation = gameLocationFactory.
+                createRandomLinesGameLocation(3 * scopeRadiusX, 4 * scopeRadiusY);
+        player = gameObjectFactory.createPlayerCharacter(0, 0);
+        gameLocation.setPlayerFreeCell(player);
+    }
     public void drawWorld() throws IOException {
         scope.actualizeScope();
         drawer.drawWorld();
@@ -144,7 +145,8 @@ public class Gameworld extends Context {
 
     private boolean isStepable(int x, int y) {
         return 0 <= x && x < gameLocation.getWidth() &&
-                0 <= y && y < gameLocation.getHeight() && gameLocation.getCharAt(x, y) != 'X';
+                0 <= y && y < gameLocation.getHeight() &&
+                gameLocation.getTextCharAt(x, y).getCharacter() != 'X';
     }
     private void playerLeftStep() {
         player.setX(player.getX() - 1);
@@ -198,15 +200,16 @@ public class Gameworld extends Context {
                                 gameObject.getY() == player.getY()) {
                             gameObject.interact(this);
                             System.out.println("interact called");
+                            /* важный брейк, взаимодействие только с
+                             * 1 обжектом делаем это первый аргумент,
+                             * второй - лут удаляется себя и итерация
+                             * форич ломается  */
+                            break;
                         }
                     }
                 }
             }
             drawWorld();
         }
-    }
-
-    public GameLocationFactory getGameLocationFactory() {
-        return gameLocationFactory;
     }
 }

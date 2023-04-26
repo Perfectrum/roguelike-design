@@ -70,7 +70,7 @@ public class Entrance extends GameObject{
             }
         }
 
-        gameworld.changeLocation(to);
+        gameworld.setGameLocation(to);
         for (var gameObject : to.getGameObjects()) {
             System.out.println(gameObject);
         }

@@ -3,26 +3,59 @@ package roguelike.gameplay.gamelocation;
 import com.googlecode.lanterna.TextCharacter;
 import roguelike.gameobjects.Entrance;
 import roguelike.gameobjects.GameObject;
+import roguelike.gameobjects.GameObjectFactory;
+import roguelike.gameobjects.items.Knife;
 
 import java.util.ArrayList;
 
 public class GameLocationFactory {
+    private GameObjectFactory gameObjectFactory;
+    public GameLocationFactory(GameObjectFactory gameObjectFactory) {
+        this.gameObjectFactory = gameObjectFactory;
+    }
 
-    private ArrayList<ArrayList<Character>> getFramedLocation(
+    private ArrayList<ArrayList<TextCharacter>> getFramedLocation(
             int width, int height) {
-        var location = new ArrayList<ArrayList<Character>> ();
+        var location = new ArrayList<ArrayList<TextCharacter>> ();
         for (int i = 0; i < width; ++i) {
-            var line = new ArrayList<Character>();
+            var line = new ArrayList<TextCharacter>();
             if (i == 0 || i == width - 1) {
                 for (int k = 0; k < height; ++k) {
-                    line.add('X');
+                    line.add(new TextCharacter('X'));
                 }
             } else {
-                line.add('X');
+                line.add(new TextCharacter('X'));
                 for (int k = 1; k < height - 1; ++k) {
-                    line.add(' ');
+                    line.add(new TextCharacter(' '));
                 }
-                line.add('X');
+                line.add(new TextCharacter('X'));
+            }
+            location.add(line);
+        }
+        return location;
+    }
+
+    private ArrayList<ArrayList<TextCharacter>> getRandomLinesLocation(
+            int width, int height) {
+        var location = new ArrayList<ArrayList<TextCharacter>> ();
+        for (int i = 0; i < width; ++i) {
+            var line = new ArrayList<TextCharacter>();
+            if (i == 0 || i == width - 1) {
+                for (int k = 0; k < height; ++k) {
+                    line.add(new TextCharacter('X'));
+                }
+            } else {
+                int left = (int)(Math.random() * (((double)width) / 5.0));
+                int right = width - 1 - (int)(Math.random() * (((double)width) / 5.0));
+                line.add(new TextCharacter('X'));
+                for (int k = 1; k < height - 1; ++k) {
+                    if (k <= left || right <= k) {
+                        line.add(new TextCharacter('X'));
+                    } else {
+                        line.add(new TextCharacter(' '));
+                    }
+                }
+                line.add(new TextCharacter('X'));
             }
             location.add(line);
         }
@@ -33,11 +66,26 @@ public class GameLocationFactory {
         return new GameLocation(width, height, location);
     }
 
-    public GameLocation createRectangularLocationWithEntrance(int width, int height) {
-        var gameLocation = createRectangularLocation(width, height);
-        var entrance = new Entrance(3, 3,
-                new TextCharacter('e'), gameLocation);
-        gameLocation.addGameObject(entrance);
+    public GameLocation createRandomLinesGameLocation(int width, int height) {
+        var location = getRandomLinesLocation(width, height);
+        var gameLocation = new GameLocation(width, height, location);
+
+        var loots = new ArrayList<GameObject>();
+        loots.add(gameObjectFactory.createLoot(3, 10, new Knife()));
+        loots.add(gameObjectFactory.createLoot(3, 10, new Knife()));
+        loots.add(gameObjectFactory.createLoot(3, 10, new Knife()));
+        loots.add(gameObjectFactory.createLoot(3, 10, new Knife()));
+
+        gameLocation.addLoots(loots);
+
+        return gameLocation;
+    }
+
+    public GameLocation createRectangularLocationWithLoot(int width, int height) {
+        var location = getFramedLocation(width, height);
+        var gameLocation = new GameLocation(width, height, location);
+        var loot1 = gameObjectFactory.createLoot(3, 10, new Knife());
+        gameLocation.addGameObject(loot1);
         return gameLocation;
     }
 
