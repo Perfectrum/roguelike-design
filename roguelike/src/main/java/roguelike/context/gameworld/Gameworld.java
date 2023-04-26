@@ -24,8 +24,8 @@ public class Gameworld extends Context {
 
         private int rightX;
         private int downY;
-        private int radiusY;
-        private int radiusX;
+        private final int radiusY;
+        private final int radiusX;
         public Scope(int radiusX, int radiusY) {
             this.radiusX = radiusX;
             this.radiusY = radiusY;
@@ -36,27 +36,33 @@ public class Gameworld extends Context {
         }
 
         public void actualizeScope() {
-            leftX = clam(0, player.getX() - radiusX,
-                    gameLocation.getWidth() - 2 * radiusX - 1);
-            rightX = clam(player.getX() + radiusX, 2 * radiusX,
+            var curRadiusX = Math.min(radiusX, (gameLocation.getWidth()- 1) / 2);
+            var curRadiusY = Math.min(radiusY, (gameLocation.getHeight() - 1) / 2);
+            leftX = clam(0, player.getX() -  curRadiusX,
+                    gameLocation.getWidth() - 2 *  curRadiusX - 1);
+            rightX = clam(player.getX() +  curRadiusX, 2 *  curRadiusX,
                     gameLocation.getWidth() - 1);
-            upY = clam(0, player.getY() - radiusY,
-                    gameLocation.getHeight() - 2 * radiusY - 1);
-            downY = clam(player.getY() + radiusY, 2 * radiusY,
+            upY = clam(0, player.getY() - curRadiusY,
+                    gameLocation.getHeight() - 2 * curRadiusY - 1);
+            downY = clam(player.getY() + curRadiusY, 2 * curRadiusY,
                     gameLocation.getHeight() - 1);
         }
     }
 
-    private Scope scope;
+    private final Scope scope;
 
-    private int scopeRadiusX = 10;
-    private int scopeRadiusY = 10;
+    private final int scopeRadiusX = 7;
+    private final int scopeRadiusY = 7;
 
     public int getScopeRadiusX() {
         return scopeRadiusX;
     }
     public int getScopeRadiusY() {
         return scopeRadiusY;
+    }
+
+    public GameLocation getGameLocation() {
+        return gameLocation;
     }
 
     public void changeLocation(GameLocation gameLocation) {
@@ -71,7 +77,6 @@ public class Gameworld extends Context {
     public Gameworld(Terminal newTerminal) throws IOException {
         super(newTerminal);
 
-
         scope = new Scope(scopeRadiusX, scopeRadiusY);
         screen = new TerminalScreen(terminal);
         drawer = new GameworldDrawer();
@@ -85,7 +90,7 @@ public class Gameworld extends Context {
 
         gameLocationFactory = new GameLocationFactory();
         gameLocation = gameLocationFactory.createRectangularLocationWithEntrance
-                (scopeRadiusX * 3, scopeRadiusY * 3);
+                (scopeRadiusX, scopeRadiusY * 4);
     }
 
     public class GameworldDrawer {
@@ -96,9 +101,9 @@ public class Gameworld extends Context {
         }
 
         private void drawScopeLocation() {
-            for (int y = scope.upY; y <= scope.downY; ++y) {
-                for (int x = scope.leftX; x <= scope.rightX; ++x) {
-                    screen.setCharacter(
+            for (int x = scope.leftX; x <= scope.rightX; ++x){
+                 {for (int y = scope.upY; y <= scope.downY; ++y)
+                     screen.setCharacter(
                             x - scope.leftX, y - scope.upY,
                             new TextCharacter(
                             gameLocation.getCharAt(x, y)));

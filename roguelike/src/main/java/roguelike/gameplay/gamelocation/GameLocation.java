@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class GameLocation {
 
-    private ArrayList<GameObject> gameObjects;
+    private ArrayList<GameObject> gameObjects = new ArrayList<>();
     private int width ;
     private int height;
 
@@ -39,5 +39,9 @@ public class GameLocation {
 
     public ArrayList<GameObject> getGameObjects() {
         return gameObjects;
+    }
+
+    public void addGameObject(GameObject gameObject) {
+        gameObjects.add(gameObject);
     }
 }

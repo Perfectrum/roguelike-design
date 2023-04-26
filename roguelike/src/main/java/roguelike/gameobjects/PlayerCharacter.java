@@ -9,7 +9,15 @@ public class PlayerCharacter extends GameObject {
         symb = c;
     }
 
-    int str = 10;
-    int agi = 10;
+    private int str = 10;
+    private int agi = 10;
 
+    private int atc = 5;
+
+    public int getAtc() {
+        return atc;
+    }
+    public void setAtc(int atc) {
+        this.atc = atc;
+    }
 }

@@ -11,15 +11,15 @@ public class GameLocationFactory {
     private ArrayList<ArrayList<Character>> getFramedLocation(
             int width, int height) {
         var location = new ArrayList<ArrayList<Character>> ();
-        for (int i = 0; i < height; ++i) {
+        for (int i = 0; i < width; ++i) {
             var line = new ArrayList<Character>();
-            if (i == 0 || i == height - 1) {
-                for (int k = 0; k < width; ++k) {
+            if (i == 0 || i == width - 1) {
+                for (int k = 0; k < height; ++k) {
                     line.add('X');
                 }
             } else {
                 line.add('X');
-                for (int k = 1; k < width - 1; ++k) {
+                for (int k = 1; k < height - 1; ++k) {
                     line.add(' ');
                 }
                 line.add('X');
@@ -34,26 +34,33 @@ public class GameLocationFactory {
     }
 
     public GameLocation createRectangularLocationWithEntrance(int width, int height) {
-        var location = getFramedLocation(width, height);
-        var gameObjects = new ArrayList<GameObject>();
-        var gameLocation = new GameLocation(width, height, location, gameObjects);
+        var gameLocation = createRectangularLocation(width, height);
         var entrance = new Entrance(3, 3,
-                new TextCharacter('e'), gameLocation, null);
-        gameObjects.add(entrance);
+                new TextCharacter('e'), gameLocation);
+        gameLocation.addGameObject(entrance);
         return gameLocation;
     }
 
-    public GameLocation createHallwayFrom(int width,
+    public Entrance createHallwayFrom(int width,
                                           int height,
                                           Entrance entranceFrom) {
         var location = getFramedLocation(width, height);
-        var entranceTo = new Entrance(3, 3,
-                new TextCharacter('e'), entranceFrom.getTo(), entranceFrom.getFrom());
-        var entranceNext = new Entrance(width - 3, height - 3,
-                new TextCharacter('e'), entranceFrom.getTo(), null);
-        var gameObjects = new ArrayList<GameObject>();
-        gameObjects.add(entranceTo);
-        gameObjects.add(entranceNext);
-        return new GameLocation(width, height, location, gameObjects);
+        var gameLocation = new GameLocation(width, height, location);
+
+        if (entranceFrom.getY() != 3) {
+            System.out.println("Got here");
+        }
+
+        var entranceNextMap = new Entrance(3, 3,
+                new TextCharacter('e'), gameLocation,
+                entranceFrom.getFrom(),
+                entranceFrom.getX(), entranceFrom.getY());
+
+        var entranceNextMapFurther = new Entrance(width - 3, height - 3,
+                new TextCharacter('e'), gameLocation);
+
+        gameLocation.addGameObject(entranceNextMap);
+        gameLocation.addGameObject(entranceNextMapFurther);
+        return entranceNextMap;
     }
 }
