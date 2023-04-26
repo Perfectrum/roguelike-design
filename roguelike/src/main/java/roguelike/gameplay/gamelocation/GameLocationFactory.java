@@ -5,6 +5,8 @@ import roguelike.gameobjects.Entrance;
 import roguelike.gameobjects.GameObject;
 import roguelike.gameobjects.GameObjectFactory;
 import roguelike.gameobjects.items.Knife;
+import roguelike.gameobjects.items.Shield;
+import roguelike.gameobjects.items.Sword;
 
 import java.util.ArrayList;
 
@@ -71,10 +73,12 @@ public class GameLocationFactory {
         var gameLocation = new GameLocation(width, height, location);
 
         var loots = new ArrayList<GameObject>();
-        loots.add(gameObjectFactory.createLoot(3, 10, new Knife()));
-        loots.add(gameObjectFactory.createLoot(3, 10, new Knife()));
-        loots.add(gameObjectFactory.createLoot(3, 10, new Knife()));
-        loots.add(gameObjectFactory.createLoot(3, 10, new Knife()));
+        loots.add(gameObjectFactory.createLoot(0, 0, new Knife()));
+        loots.add(gameObjectFactory.createLoot(0, 0, new Knife()));
+        loots.add(gameObjectFactory.createLoot(0, 0, new Sword()));
+        loots.add(gameObjectFactory.createLoot(0, 0, new Shield()));
+        loots.add(gameObjectFactory.createLoot(0, 0, new Shield()));
+        loots.add(gameObjectFactory.createLoot(0, 0, new Shield()));
 
         gameLocation.addLoots(loots);
 

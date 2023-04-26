@@ -2,13 +2,13 @@ package roguelike.gameobjects.items;
 
 import roguelike.gameobjects.PlayerCharacter;
 
-public class Knife extends EquipableItem {
-    int plusAtc = 10;
-    public Knife() {
-        name = "Knife";
+public class Sword extends EquipableItem {
+    int plusAtc = 30;
+
+    public Sword() {
+        name = "Sword";
         slot = Slot.RightHand;
     }
-
     @Override
     public void equip(PlayerCharacter playerCharacter) {
         super.equip(playerCharacter);

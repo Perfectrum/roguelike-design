@@ -67,7 +67,7 @@ public class GameLocation {
         for (int i = 0; i < width; ++i) {
             for (int k = 0; k < height; ++k) {
                 if (location.get(i).get(k).getCharacter() == ' ') {
-                    if (Math.random() < 0.05) {
+                    if (Math.random() < 20.0 / (double) (width * height)) {
                         var loot = loots.get(curLootNum++);
                         loot.setX(i);
                         loot.setY(k);

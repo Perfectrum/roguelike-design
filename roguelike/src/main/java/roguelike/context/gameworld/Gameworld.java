@@ -1,10 +1,12 @@
 package roguelike.context.gameworld;
 
+import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.Terminal;
 import roguelike.context.Context;
 import roguelike.gameobjects.GameObjectFactory;
 import roguelike.gameobjects.PlayerCharacter;
+import roguelike.gameobjects.items.EquipableItem;
 import roguelike.gameplay.gamelocation.GameLocation;
 import roguelike.gameplay.gamelocation.GameLocationFactory;
 
@@ -107,12 +109,45 @@ public class Gameworld extends Context {
                     player.getY() - scope.upY, player.getSymb());
         }
 
+        void drawInventoryMenu() throws IOException {
+            var terminalSize = terminal.getTerminalSize();
+            int menuWidth = 25;
+            int menuHeight = 20;
+            int inventoryUpRow = 0;
+            int inventoryLeftColumn = terminalSize.getColumns() - menuWidth;
+            var curRow = inventoryUpRow;
+            var curColumn = inventoryLeftColumn;
+
+            for (int k = firstItem; k < player.getInventory().getItems().size(); ++k) {
+                var item = player.getInventory().getItems().get(k);
+                var name = item.getName();
+                screen.setCharacter(curColumn++, curRow,
+                        new TextCharacter((char)('0' + (k - firstItem))));
+                curColumn++;
+                for (int i = 0; i < name.length(); ++i) {
+                    screen.setCharacter(curColumn++, curRow, new TextCharacter(name.charAt(i)));
+                }
+                if (EquipableItem.class.isInstance(item)) {
+                    var eqItem = (EquipableItem)item;
+                    if (eqItem.itemIsEquiped()) {
+                        screen.setCharacter(terminalSize.getColumns() - 3,
+                                curRow, new TextCharacter('e'));
+                    }
+                }
+                curColumn = inventoryLeftColumn;
+                ++curRow;
+            }
+        }
+
         public void drawWorld() throws IOException {
             terminal.clearScreen();
             screen.clear();
 
             drawScopeLocation();
             drawPlayer();
+            if (inInventoryMenu) {
+                drawInventoryMenu();
+            }
             screen.refresh();
             terminal.flush();
             Thread.yield();
@@ -134,7 +169,7 @@ public class Gameworld extends Context {
 
         gameLocationFactory = new GameLocationFactory(gameObjectFactory);
         gameLocation = gameLocationFactory.
-                createRandomLinesGameLocation(3 * scopeRadiusX, 4 * scopeRadiusY);
+                createRandomLinesGameLocation(5 * scopeRadiusX, 4 * scopeRadiusY);
         player = gameObjectFactory.createPlayerCharacter(0, 0);
         gameLocation.setPlayerFreeCell(player);
     }
@@ -161,6 +196,40 @@ public class Gameworld extends Context {
         player.setY(player.getY() + 1);
     }
 
+    private boolean inInventoryMenu = false;
+    private int firstItem = 0;
+    private void runInventory() throws IOException {
+        firstItem = 0;
+        drawWorld();
+
+        while (true) {
+            var keyStroke = getKey();
+            int scrollSize = 10;
+            if (keyStroke == null) {
+                continue;
+            }
+            var ch = keyStroke.getCharacter();
+            switch (ch) {
+                case 'i', 'I' -> {
+                    inInventoryMenu = false;
+                    return;
+                }
+                case 'p', 'P' -> {
+                    firstItem = Math.max(0, firstItem - scrollSize);
+                }
+                case 'n', 'N' -> {
+                    firstItem = firstItem + scrollSize;
+                }
+            }
+            if (Character.isDigit(ch)) {
+                int ind = firstItem + (ch - '0');
+                if (ind < player.getInventory().getItems().size()) {
+                    player.getInventory().getItem(ind).useByPlayer(player);
+                }
+            }
+            drawWorld();
+        }
+    }
     @Override
     public ReturnResult run() throws InterruptedException, IOException {
         Thread.yield();
@@ -207,6 +276,10 @@ public class Gameworld extends Context {
                             break;
                         }
                     }
+                }
+                case 'i', 'I' -> {
+                    inInventoryMenu = true;
+                    runInventory();
                 }
             }
             drawWorld();
