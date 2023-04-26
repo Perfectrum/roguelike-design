@@ -11,8 +11,8 @@ public class Context {
     public Context(Terminal newTerminal) {
         terminal = newTerminal;
     }
-    public KeyStroke getKey() throws IOException {
-        return terminal.pollInput();
+    public Character getKey() throws IOException {
+        return terminal.readInput().getCharacter();
     }
     public class ReturnResult {
         public enum EnumResult {

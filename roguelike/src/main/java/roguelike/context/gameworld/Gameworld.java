@@ -41,6 +41,8 @@ public class Gameworld extends Context {
         player.setY(y);
     }
 
+;
+
     class Scope {
         private int leftX;
         private int upY;
@@ -157,14 +159,6 @@ public class Gameworld extends Context {
 
     public Gameworld(Terminal newTerminal) throws IOException {
         super(newTerminal);
-
-        scope = new Scope(scopeRadiusX, scopeRadiusY);
-        screen = new TerminalScreen(terminal);
-        screen.startScreen();
-        screen.setCursorPosition(null);
-
-        drawer = new GameworldDrawer();
-
         gameObjectFactory = new GameObjectFactory();
 
         gameLocationFactory = new GameLocationFactory(gameObjectFactory);
@@ -172,6 +166,13 @@ public class Gameworld extends Context {
                 createRandomLinesGameLocation(5 * scopeRadiusX, 4 * scopeRadiusY);
         player = gameObjectFactory.createPlayerCharacter(0, 0);
         gameLocation.setPlayerFreeCell(player);
+
+        scope = new Scope(scopeRadiusX, scopeRadiusY);
+        screen = new TerminalScreen(terminal);
+        screen.startScreen();
+        screen.setCursorPosition(null);
+
+        drawer = new GameworldDrawer();
     }
     public void drawWorld() throws IOException {
         scope.actualizeScope();
@@ -183,18 +184,7 @@ public class Gameworld extends Context {
                 0 <= y && y < gameLocation.getHeight() &&
                 gameLocation.getTextCharAt(x, y).getCharacter() != 'X';
     }
-    private void playerLeftStep() {
-        player.setX(player.getX() - 1);
-    }
-    private void playerRightStep() {
-        player.setX(player.getX() + 1);
-    }
-    private void playerUpStep() {
-        player.setY(player.getY() - 1);
-    }
-    private void playerDownStep() {
-        player.setY(player.getY() + 1);
-    }
+
 
     private boolean inInventoryMenu = false;
     private int firstItem = 0;
@@ -208,8 +198,7 @@ public class Gameworld extends Context {
             if (keyStroke == null) {
                 continue;
             }
-            var ch = keyStroke.getCharacter();
-            switch (ch) {
+            switch (keyStroke) {
                 case 'i', 'I' -> {
                     inInventoryMenu = false;
                     return;
@@ -221,8 +210,8 @@ public class Gameworld extends Context {
                     firstItem = firstItem + scrollSize;
                 }
             }
-            if (Character.isDigit(ch)) {
-                int ind = firstItem + (ch - '0');
+            if (Character.isDigit(keyStroke)) {
+                int ind = firstItem + (keyStroke - '0');
                 if (ind < player.getInventory().getItems().size()) {
                     player.getInventory().getItem(ind).useByPlayer(player);
                 }
@@ -239,28 +228,28 @@ public class Gameworld extends Context {
             if (keyStroke == null) {
                 continue;
             }
-            switch (keyStroke.getCharacter()) {
+            switch (keyStroke) {
                 case 'm', 'M' -> {
                     return new ReturnResult(ReturnResult.EnumResult.ReturnToMainMenu);
                 }
                 case 'w', 'W' -> {
                     if (isStepable(player.getX(), player.getY() - 1)) {
-                        playerUpStep();
+                        player.upStep();
                     }
                 }
                 case 's', 'S' -> {
                     if (isStepable(player.getX(), player.getY() + 1)) {
-                        playerDownStep();
+                        player.downStep();
                     }
                 }
                 case 'a', 'A' -> {
                     if (isStepable(player.getX() - 1, player.getY())) {
-                        playerLeftStep();
+                        player.leftStep();
                     }
                 }
                 case 'd', 'D' -> {
                     if (isStepable(player.getX() + 1, player.getY())) {
-                        playerRightStep();
+                        player.rightStep();
                     }
                 }
                 case 'e', 'E' -> {
@@ -280,6 +269,10 @@ public class Gameworld extends Context {
                 case 'i', 'I' -> {
                     inInventoryMenu = true;
                     runInventory();
+                }
+
+                case 'q', 'Q' -> {
+                    return null;
                 }
             }
             drawWorld();

@@ -33,7 +33,7 @@ public class MainMenu extends Context {
             if (keyStroke == null) {
                 continue;
             }
-            switch (keyStroke.getCharacter()) {
+            switch (keyStroke) {
                 case '1':
                     return new ReturnResult(ReturnResult.EnumResult.StartNewGame);
                 case '2':

@@ -33,6 +33,19 @@ public class PlayerCharacter extends GameObject {
         this.symb = symb;
     }
 
+    public void leftStep() {
+        --xObject;
+    }
+    public void rightStep() {
+        ++xObject;
+    }
+    public void upStep() {
+        --yObject;
+    }
+    public void downStep() {
+        ++yObject;
+    }
+
     private int atc = 5;
 
     private int def = 0;
