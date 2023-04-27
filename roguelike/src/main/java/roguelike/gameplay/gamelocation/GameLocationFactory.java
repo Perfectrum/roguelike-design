@@ -10,6 +10,8 @@ import roguelike.gameobjects.items.Sword;
 
 import java.util.ArrayList;
 
+
+/** Создаёт карты, добавляет на них игровые объекты.  */
 public class GameLocationFactory {
     private GameObjectFactory gameObjectFactory;
     public GameLocationFactory(GameObjectFactory gameObjectFactory) {
@@ -63,11 +65,17 @@ public class GameLocationFactory {
         }
         return location;
     }
+
+    /** Создаёт локацию очерченную непроходимыми клетками
+     * по прямоугольному периметру. */
     public GameLocation createRectangularLocation(int width, int height) {
         var location = getFramedLocation(width, height);
         return new GameLocation(width, height, location);
     }
 
+    /** Создаёт локацию очерченную непроходимыми клетками
+     * по прямоугольному периметру и добавляет на неё фиксированный loot в
+     * случайные места. */
     public GameLocation createRandomLinesGameLocation(int width, int height) {
         var location = getRandomLinesLocation(width, height);
         var gameLocation = new GameLocation(width, height, location);
@@ -85,6 +93,10 @@ public class GameLocationFactory {
         return gameLocation;
     }
 
+
+    /** Создаёт локацию очерченную непроходимыми клетками
+     * по прямоугольному периметру и добавляет в неё фиксированный loot
+     * в случайные места. */
     public GameLocation createRectangularLocationWithLoot(int width, int height) {
         var location = getFramedLocation(width, height);
         var gameLocation = new GameLocation(width, height, location);
@@ -93,6 +105,7 @@ public class GameLocationFactory {
         return gameLocation;
     }
 
+    /** Создаёт локацию которая представляет собой корридор. */
     public Entrance createHallwayFrom(int width,
                                           int height,
                                           Entrance entranceFrom) {

@@ -18,7 +18,7 @@ import java.io.IOException;
  * * Персонажа
  * * Локацию и объекты на ней
  * * Статус меню инвентаря
- * Интерпретирует действия игрока
+ * Интерпретирует действия игрока.
  * */
 public class Gameworld extends Context {
     private final GameObjectFactory gameObjectFactory;
@@ -51,7 +51,7 @@ public class Gameworld extends Context {
 
 
         /**
-         * Хранит границы части карты которую нужно отрисовать*/
+         * Хранит границы части карты которую нужно отрисовать. */
     public class Scope {
         private int leftX;
         private int upY;
@@ -69,7 +69,7 @@ public class Gameworld extends Context {
         }
 
 
-        /** Актуализирует скоуп под текущую игровую ситуацию */
+        /** Актуализирует скоуп под текущую игровую ситуацию. */
         public void actualizeScope() {
             var curRadiusX = Math.min(radiusX, (gameLocation.getWidth()- 1) / 2);
             var curRadiusY = Math.min(radiusY, (gameLocation.getHeight() - 1) / 2);
@@ -159,7 +159,7 @@ public class Gameworld extends Context {
         }
 
         /** Рисует игровой мир,
-         * рисует меню инвентаря если оно вызвано */
+         * рисует меню инвентаря если оно вызвано. */
         public void drawWorld() throws IOException {
             terminal.clearScreen();
             screen.clear();
@@ -195,7 +195,7 @@ public class Gameworld extends Context {
         drawer = new GameworldDrawer();
     }
 
-    /** Актуализирует скоуп и диктует нарисовать игровой мир */
+    /** Актуализирует скоуп и диктует нарисовать игровой мир. */
     public void drawWorld() throws IOException {
         scope.actualizeScope();
         drawer.drawWorld();
@@ -221,7 +221,7 @@ public class Gameworld extends Context {
             this.inventory = inventory;
         }
 
-        /** Запускает работу с меню инвентаря */
+        /** Запускает работу с меню инвентаря. */
         public void runInventory() throws IOException {
             firstItem = 0;
             drawWorld();
@@ -263,7 +263,7 @@ public class Gameworld extends Context {
 
     /**
      * Запускает работу gameworld как контекста, читает ввода игрока
-     * и интерпретирует его действия для окружающего мира */
+     * и интерпретирует его действия для окружающего мира. */
     @Override
     public ReturnResult run() throws InterruptedException, IOException {
         Thread.yield();

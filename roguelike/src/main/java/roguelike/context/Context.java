@@ -6,7 +6,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 import java.io.IOException;
 
 /** Контекст текущей игры, читает ввод игрока
- *  который интерпретирует в своей предметной области*/
+ *  который интерпретирует в своей предметной области. */
 public class Context {
     protected Terminal terminal;
 
@@ -14,7 +14,7 @@ public class Context {
         terminal = newTerminal;
     }
 
-    /** Читает введенный символ*/
+    /** Читает введенный символ. */
     public Character getKey() throws IOException {
         return terminal.readInput().getCharacter();
     }
@@ -33,7 +33,7 @@ public class Context {
             return enumRes;
         }
     }
-    /** Запускает работу контекста */
+    /** Запускает работу контекста. */
     public ReturnResult run() throws InterruptedException, IOException {
         return null;
     }

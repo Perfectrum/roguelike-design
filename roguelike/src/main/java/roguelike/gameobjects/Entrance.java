@@ -4,6 +4,7 @@ import com.googlecode.lanterna.TextCharacter;
 import roguelike.context.gameworld.Gameworld;
 import roguelike.gameplay.gamelocation.GameLocation;
 
+/** Вход в следующую локацию */
 public class Entrance extends GameObject{
     GameLocation to;
     GameLocation from;
@@ -53,6 +54,7 @@ public class Entrance extends GameObject{
         return to;
     }
 
+    /** Взаимодействие со входом, войти в следующую локацию. */
     public void interact(Gameworld gameworld) {
         if (to == null) {
             System.out.println("NULL");

@@ -14,7 +14,7 @@ public class MainMenu extends Context {
         super(newTerminal);
     }
 
-    /** Рисует главное меню */
+    /** Рисует главное меню. */
     private void introduceMenu() throws IOException {
         terminal.clearScreen();
         terminal.putString("1. Start new Game (last game will be deleted)");
@@ -27,7 +27,7 @@ public class MainMenu extends Context {
 
     }
 
-    /** Запускает работу меню как контекста */
+    /** Запускает работу меню как контекста. */
     @Override
     public ReturnResult run() throws InterruptedException, IOException {
         Thread.yield();

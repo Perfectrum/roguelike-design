@@ -5,11 +5,14 @@ import roguelike.gameobjects.items.EquipableItem;
 import roguelike.gameobjects.items.Item;
 
 import java.util.ArrayList;
-
+/** Хранит координаты где находится игрок,
+ *  его характеристики и инвентарь. */
 public class PlayerCharacter extends GameObject {
     EquipableItem leftHandItem = null;
     EquipableItem rightHandItem = null;
 
+
+    /** Взять предмет в левую руку */
     public void equipLeftHandItem(EquipableItem item) {
         if (leftHandItem != null) {
             leftHandItem.unEquip(this);
@@ -18,6 +21,7 @@ public class PlayerCharacter extends GameObject {
         leftHandItem = item;
     }
 
+    /** Взять предмет в правую руку */
     public void equipRightHandItem(EquipableItem item) {
         if (rightHandItem != null) {
             rightHandItem.unEquip(this);
@@ -33,15 +37,22 @@ public class PlayerCharacter extends GameObject {
         this.symb = symb;
     }
 
+    /** Шаг влево. */
     public void leftStep() {
         --xObject;
     }
+
+    /** Шаг вправо. */
     public void rightStep() {
         ++xObject;
     }
+
+    /** Шаг вверх */
     public void upStep() {
         --yObject;
     }
+
+    /** Шаг вниз */
     public void downStep() {
         ++yObject;
     }
@@ -71,7 +82,7 @@ public class PlayerCharacter extends GameObject {
     public Inventory getInventory() {
         return inventory;
     }
-
+    /** Хранит предметы (item) полученные игроком. */
     public class Inventory {
         private final ArrayList<Item> items = new ArrayList<Item>();
 

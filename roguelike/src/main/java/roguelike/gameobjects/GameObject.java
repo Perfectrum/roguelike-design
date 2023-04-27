@@ -2,24 +2,17 @@ package roguelike.gameobjects;
 
 import com.googlecode.lanterna.TextCharacter;
 import roguelike.context.gameworld.Gameworld;
-
+/**
+ * Игровые объекты, которые могут быть расположены на карте
+ * */
 public class GameObject {
     protected int id;
     protected TextCharacter symb;
     protected int xObject;
     protected int yObject;
 
-    public void setSymb(TextCharacter symb) {
-        this.symb = symb;
-    }
-    public void setxObject(int x) {
-        xObject = x;
-    }
-
-    public void setyObject(int y) {
-        yObject = y;
-    }
-
+    /** Вызывается когда игрок взаимодействует с игровым объектом
+     *  */
     public void interact(Gameworld gameworld) {
     }
 

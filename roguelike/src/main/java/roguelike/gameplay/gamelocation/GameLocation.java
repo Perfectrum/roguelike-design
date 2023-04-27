@@ -6,6 +6,7 @@ import roguelike.gameobjects.PlayerCharacter;
 
 import java.util.ArrayList;
 
+/** Хранит карту и объекты на ней. */
 public class GameLocation {
 
     private ArrayList<GameObject> gameObjects = new ArrayList<>();
@@ -51,6 +52,7 @@ public class GameLocation {
         gameObjects.remove(gameObject);
     }
 
+    /** Находит свободную клетку и помещает туда игрока. */
     public void setPlayerFreeCell(PlayerCharacter playerCharacter) {
         for (int i = 0; i < width; ++i) {
             for (int k = 0; k < height; ++k) {
@@ -62,6 +64,9 @@ public class GameLocation {
             }
         }
     }
+
+    /** Случайно добавляет множество loot'a а локацию, может быть добавлен не весь,
+     *  если локация маленькая */
     public void addLoots(ArrayList<GameObject> loots) {
         int curLootNum = 0;
         for (int i = 0; i < width; ++i) {

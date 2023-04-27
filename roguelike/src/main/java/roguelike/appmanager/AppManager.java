@@ -14,8 +14,8 @@ import java.io.IOException;
  *  Управляет контекстами, переключает их и запускает через метод run()
  */
 public class AppManager {
-    /** Метод инициализирующую остальные ключевые
-    классы и запускающий их работу*/
+    /** Метод, инициализирующий остальные ключевые
+    классы и запускающий их работу. */
     public static void main(String[] args) throws InterruptedException, IOException {
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
         Terminal terminal = defaultTerminalFactory.createTerminal();
