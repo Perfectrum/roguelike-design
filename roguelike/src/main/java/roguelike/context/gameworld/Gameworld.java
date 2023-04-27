@@ -12,6 +12,14 @@ import roguelike.gameplay.gamelocation.GameLocationFactory;
 
 import java.io.IOException;
 
+/**
+ * Хранит состояние текущей игры:
+ *
+ * * Персонажа
+ * * Локацию и объекты на ней
+ * * Статус меню инвентаря
+ * Интерпретирует действия игрока
+ * */
 public class Gameworld extends Context {
     private final GameObjectFactory gameObjectFactory;
     private final GameLocationFactory gameLocationFactory;
@@ -41,9 +49,10 @@ public class Gameworld extends Context {
         player.setY(y);
     }
 
-;
 
-    class Scope {
+        /**
+         * Хранит границы части карты которую нужно отрисовать*/
+    public class Scope {
         private int leftX;
         private int upY;
         private int rightX;
@@ -59,6 +68,8 @@ public class Gameworld extends Context {
             return Math.min(Math.max(a, b), c);
         }
 
+
+        /** Актуализирует скоуп под текущую игровую ситуацию */
         public void actualizeScope() {
             var curRadiusX = Math.min(radiusX, (gameLocation.getWidth()- 1) / 2);
             var curRadiusY = Math.min(radiusY, (gameLocation.getHeight() - 1) / 2);
@@ -85,6 +96,12 @@ public class Gameworld extends Context {
         return scopeRadiusY;
     }
 
+    /**
+     * Рисует игровой мир методом drawWorld(), вызывается после действия игрока.
+     *
+     * Рисует меню инвентаря если он был вызван.
+     *
+     * Берет информацию о карте и рисует её.*/
     public class GameworldDrawer {
         public GameworldDrawer () {}
 
@@ -111,7 +128,7 @@ public class Gameworld extends Context {
                     player.getY() - scope.upY, player.getSymb());
         }
 
-        void drawInventoryMenu() throws IOException {
+        private void drawInventoryMenu() throws IOException {
             var terminalSize = terminal.getTerminalSize();
             int menuWidth = 25;
             int menuHeight = 20;
@@ -141,6 +158,8 @@ public class Gameworld extends Context {
             }
         }
 
+        /** Рисует игровой мир,
+         * рисует меню инвентаря если оно вызвано */
         public void drawWorld() throws IOException {
             terminal.clearScreen();
             screen.clear();
@@ -175,6 +194,8 @@ public class Gameworld extends Context {
 
         drawer = new GameworldDrawer();
     }
+
+    /** Актуализирует скоуп и диктует нарисовать игровой мир */
     public void drawWorld() throws IOException {
         scope.actualizeScope();
         drawer.drawWorld();
@@ -190,11 +211,17 @@ public class Gameworld extends Context {
     private boolean inInventoryMenu = false;
     private int firstItem = 0;
 
+    /**
+     * Меню инвентаря, отвечает за взаимодействие игрока с инвентарём,
+     * переключается когда игрок нажимает i.  В нём игрок может экипировать
+     * выбранный по номеру предмет. */
     public class InventoryMenu {
         private PlayerCharacter.Inventory inventory;
         public InventoryMenu(PlayerCharacter.Inventory inventory) {
             this.inventory = inventory;
         }
+
+        /** Запускает работу с меню инвентаря */
         public void runInventory() throws IOException {
             firstItem = 0;
             drawWorld();
@@ -234,6 +261,9 @@ public class Gameworld extends Context {
         inventoryMenu.runInventory();
     }
 
+    /**
+     * Запускает работу gameworld как контекста, читает ввода игрока
+     * и интерпретирует его действия для окружающего мира */
     @Override
     public ReturnResult run() throws InterruptedException, IOException {
         Thread.yield();

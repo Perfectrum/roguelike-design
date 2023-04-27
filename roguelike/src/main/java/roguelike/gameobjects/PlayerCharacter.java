@@ -81,7 +81,7 @@ public class PlayerCharacter extends GameObject {
             return items.get(ind);
         }
         public void addItem(Item item) {
-            System.out.println(item.getDescription() + " added");
+            System.out.println(item.getName() + " added");
             items.add(item);
         }
 

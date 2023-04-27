@@ -6,11 +6,15 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
 
+/**
+ * Один из двух возможных контекстов (второй - Игровой Мир),
+ * принимает выбор игрока, является контекстом, то есть реализует его основной метод run.*/
 public class MainMenu extends Context {
     public MainMenu(Terminal newTerminal) {
         super(newTerminal);
     }
 
+    /** Рисует главное меню */
     private void introduceMenu() throws IOException {
         terminal.clearScreen();
         terminal.putString("1. Start new Game (last game will be deleted)");
@@ -23,6 +27,7 @@ public class MainMenu extends Context {
 
     }
 
+    /** Запускает работу меню как контекста */
     @Override
     public ReturnResult run() throws InterruptedException, IOException {
         Thread.yield();
@@ -38,6 +43,8 @@ public class MainMenu extends Context {
                     return new ReturnResult(ReturnResult.EnumResult.StartNewGame);
                 case '2':
                     return new ReturnResult(ReturnResult.EnumResult.ContinueGame);
+                case 'q':
+                    return null;
             }
         }
     }

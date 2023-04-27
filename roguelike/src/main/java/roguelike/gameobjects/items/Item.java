@@ -12,15 +12,11 @@ public class Item {
     public Item() {
     }
 
-    public String getDescription() {
-        return name;
-    }
-
     public void useByPlayer(PlayerCharacter playerCharacter) {
 
     }
 
-    Item(String description) {
-        this.name = description;
+    Item(String name) {
+        this.name = name;
     }
 }

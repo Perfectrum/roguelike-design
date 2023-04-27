@@ -10,7 +10,7 @@ import roguelike.context.gameworld.Gameworld;
 import java.io.IOException;
 
 public class TestPlayerStep {
-    @Test
+    @org.junit.Test
     public void testPlayerStep1() throws IOException, InterruptedException {
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
         Terminal terminal = defaultTerminalFactory.createTerminal();

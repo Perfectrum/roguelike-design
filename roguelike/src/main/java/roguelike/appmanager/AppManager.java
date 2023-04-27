@@ -8,7 +8,14 @@ import roguelike.context.MainMenu;
 
 import java.io.IOException;
 
+/**
+ *  Начинает работу приложения (в нем находится метод main)
+ *  Инициализирует контексты
+ *  Управляет контекстами, переключает их и запускает через метод run()
+ */
 public class AppManager {
+    /** Метод инициализирующую остальные ключевые
+    классы и запускающий их работу*/
     public static void main(String[] args) throws InterruptedException, IOException {
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
         Terminal terminal = defaultTerminalFactory.createTerminal();
@@ -21,6 +28,7 @@ public class AppManager {
             var res = currentContext.run();
             if (res == null) {
                 System.out.println("Context returned null");
+                terminal.close();
                 return;
             }
             var enumRes = res.getEnumRes();

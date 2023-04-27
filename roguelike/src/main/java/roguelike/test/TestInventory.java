@@ -12,7 +12,7 @@ import java.io.IOException;
 
 
 public class TestInventory {
-    @Test
+    @org.junit.Test
     public void testInventory1() throws IOException, InterruptedException {
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
         Terminal terminal = defaultTerminalFactory.createTerminal();

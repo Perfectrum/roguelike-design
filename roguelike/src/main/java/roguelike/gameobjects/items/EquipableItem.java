@@ -2,6 +2,7 @@ package roguelike.gameobjects.items;
 
 import roguelike.gameobjects.PlayerCharacter;
 
+/** Класс одеваемых предметов */
 public class EquipableItem extends Item {
     static enum Slot{
         LeftHand,
@@ -11,10 +12,12 @@ public class EquipableItem extends Item {
     protected Slot slot;
     private boolean isEquiped = false;
 
+    /** Сообщает одет ли данный предмет */
     public boolean itemIsEquiped() {
         return isEquiped;
     }
 
+    /** Одевает или снимает предмет с игрока */
     public void useByPlayer(PlayerCharacter playerCharacter) {
         if (!isEquiped) {
             equip(playerCharacter);
@@ -22,6 +25,9 @@ public class EquipableItem extends Item {
             unEquip(playerCharacter);
         }
     }
+
+    /** Одевает предмет
+     *  на игрока в соответствующий слот */
     public void equip(PlayerCharacter playerCharacter) {
         if (isEquiped) {
             return;
@@ -34,6 +40,8 @@ public class EquipableItem extends Item {
         }
     }
 
+    /** Снимает предмет
+     *  с игрока с соответствующего слота */
     public void unEquip(PlayerCharacter playerCharacter) {
         if (!isEquiped) {
             return;
@@ -46,6 +54,7 @@ public class EquipableItem extends Item {
         }
     }
 
+    /** Возвращает слот-место куда одевается предмет */
     public Slot getSlot() {
         return slot;
     }
