@@ -1,5 +1,4 @@
-package roguelike.test;
-import com.googlecode.lanterna.TextCharacter;
+package roguelike;
 import com.googlecode.lanterna.terminal.Terminal;
 import roguelike.context.gameworld.Gameworld;
 

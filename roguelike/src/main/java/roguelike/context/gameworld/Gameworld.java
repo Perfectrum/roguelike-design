@@ -131,7 +131,7 @@ public class Gameworld extends Context {
         private void drawInventoryMenu() throws IOException {
             var terminalSize = terminal.getTerminalSize();
             int menuWidth = 25;
-            int menuHeight = 20;
+            // int menuHeight = 20;
             int inventoryUpRow = 0;
             int inventoryLeftColumn = terminalSize.getColumns() - menuWidth;
             var curRow = inventoryUpRow;

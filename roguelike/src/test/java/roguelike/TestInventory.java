@@ -1,4 +1,4 @@
-package roguelike.test;
+package roguelike;
 
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 
 public class TestInventory {
-    @org.junit.Test
+    @Test
     public void testInventory1() throws IOException, InterruptedException {
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
         Terminal terminal = defaultTerminalFactory.createTerminal();

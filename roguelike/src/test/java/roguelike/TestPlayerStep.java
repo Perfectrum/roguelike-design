@@ -1,16 +1,15 @@
-package roguelike.test;
+package roguelike;
 
 
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import roguelike.context.gameworld.Gameworld;
 
 import java.io.IOException;
 
 public class TestPlayerStep {
-    @org.junit.Test
+    @Test
     public void testPlayerStep1() throws IOException, InterruptedException {
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
         Terminal terminal = defaultTerminalFactory.createTerminal();
