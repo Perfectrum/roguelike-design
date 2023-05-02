@@ -1,4 +1,4 @@
-package roguelike.gameplay.gamelocation;
+package roguelike.gamelocation;
 
 import com.googlecode.lanterna.TextCharacter;
 import roguelike.gameobjects.Entrance;

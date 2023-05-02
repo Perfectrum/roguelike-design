@@ -4,11 +4,11 @@ import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.Terminal;
 import roguelike.context.Context;
+import roguelike.gamelocation.GameLocationFactory;
 import roguelike.gameobjects.GameObjectFactory;
 import roguelike.gameobjects.PlayerCharacter;
 import roguelike.gameobjects.items.EquipableItem;
-import roguelike.gameplay.gamelocation.GameLocation;
-import roguelike.gameplay.gamelocation.GameLocationFactory;
+import roguelike.gamelocation.GameLocation;
 
 import java.io.IOException;
 

@@ -2,7 +2,7 @@ package roguelike.gameobjects;
 
 import com.googlecode.lanterna.TextCharacter;
 import roguelike.context.gameworld.Gameworld;
-import roguelike.gameplay.gamelocation.GameLocation;
+import roguelike.gamelocation.GameLocation;
 
 /** Вход в следующую локацию */
 public class Entrance extends GameObject{

@@ -23,7 +23,6 @@ public class AppManager {
         MainMenu mainMenu = new MainMenu(terminal);
         Gameworld gameWorld = null;
         Context currentContext = mainMenu;
-
         while (true) {
             var res = currentContext.run();
             if (res == null) {
