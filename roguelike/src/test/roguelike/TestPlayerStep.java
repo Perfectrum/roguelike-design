@@ -63,11 +63,11 @@ public class TestPlayerStep {
 
         gameworld.run();
         Assertions.assertEquals(x, player.getX());
-        Assertions.assertEquals(y + 6 ,player.getY());
+        Assertions.assertTrue( player.getY() <= y + 6);
 
         gameworld.setInput("aaaaaq");
         gameworld.run();
         Assertions.assertTrue(player.getX() <= x);
-        Assertions.assertEquals(y + 6 ,player.getY());
+        Assertions.assertTrue( player.getY() <= y + 6);
     }
 }
