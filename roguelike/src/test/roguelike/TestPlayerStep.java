@@ -47,10 +47,7 @@ public class TestPlayerStep {
 
     @Test
     public void testPlayerStep2() throws IOException, InterruptedException {
-        DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
-        Terminal terminal = defaultTerminalFactory.createTerminal();
-
-        TestGameworld gameworld = new TestGameworld("ssssssq", terminal);
+        TestGameworld gameworld = new TestGameworld("ssssssq", null);
 
         int width = 40;
         int height = 40;
