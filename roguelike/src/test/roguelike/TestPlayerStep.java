@@ -11,10 +11,7 @@ import java.io.IOException;
 public class TestPlayerStep {
     @Test
     public void testPlayerStep1() throws IOException, InterruptedException {
-        DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
-        Terminal terminal = defaultTerminalFactory.createTerminal();
-
-        TestGameworld gameworld = new TestGameworld("sssswwwwq", terminal);
+        TestGameworld gameworld = new TestGameworld("sssswwwwq", null);
 
         int width = 20;
         int height = 20;

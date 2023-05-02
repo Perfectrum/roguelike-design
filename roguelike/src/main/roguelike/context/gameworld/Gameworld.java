@@ -36,7 +36,7 @@ public class Gameworld extends Context {
         this.gameLocation = gameLocation;
     }
 
-    private final TerminalScreen screen;
+    private TerminalScreen screen;
 
     private final PlayerCharacter player;
 
@@ -188,15 +188,19 @@ public class Gameworld extends Context {
         inventoryMenu = new InventoryMenu(player.getInventory());
 
         scope = new Scope(scopeRadiusX, scopeRadiusY);
-        screen = new TerminalScreen(terminal);
-        screen.startScreen();
-        screen.setCursorPosition(null);
-
+        if (terminal != null) {
+            screen = new TerminalScreen(terminal);
+            screen.startScreen();
+            screen.setCursorPosition(null);
+        }
         drawer = new GameworldDrawer();
     }
 
     /** Актуализирует скоуп и диктует нарисовать игровой мир. */
     public void drawWorld() throws IOException {
+        if (terminal == null) {
+            return;
+        }
         scope.actualizeScope();
         drawer.drawWorld();
     }

@@ -14,10 +14,7 @@ import java.io.IOException;
 public class TestInventory {
     @Test
     public void testInventory1() throws IOException, InterruptedException {
-        DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
-        Terminal terminal = defaultTerminalFactory.createTerminal();
-
-        TestGameworld gameworld = new TestGameworld("i010iq", terminal);
+        TestGameworld gameworld = new TestGameworld("i010iq", null);
 
         int width = 20;
         int height = 20;
