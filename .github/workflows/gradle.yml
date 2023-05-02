@@ -33,4 +33,5 @@ jobs:
     - name: Run test
       run: cd roguelike && ./gradlew test
     - name: Print report
+      if: failure()
       run: cat ./roguelike/build/reports/tests/test/index.html
