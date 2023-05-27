@@ -30,6 +30,7 @@ java {
             java.setSrcDirs(listOf("src/test"))
         }
     }
+    sourceCompatibility = JavaVersion.VERSION_14
 }
 
 group = "org.example"

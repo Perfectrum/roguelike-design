@@ -140,17 +140,16 @@ public class Gameworld extends Context {
             for (int k = firstItem; k < player.getInventory().getItems().size(); ++k) {
                 var item = player.getInventory().getItems().get(k);
                 var name = item.getName();
-                screen.setCharacter(curColumn++, curRow,
-                        new TextCharacter((char)('0' + (k - firstItem))));
+                screen.setCharacter(curColumn++, curRow, TextCharacter.fromCharacter((char)('0' + (k - firstItem)))[0]);
                 curColumn++;
                 for (int i = 0; i < name.length(); ++i) {
-                    screen.setCharacter(curColumn++, curRow, new TextCharacter(name.charAt(i)));
+                    screen.setCharacter(curColumn++, curRow,  TextCharacter.fromCharacter(name.charAt(i))[0]);
                 }
                 if (EquipableItem.class.isInstance(item)) {
                     var eqItem = (EquipableItem)item;
                     if (eqItem.itemIsEquiped()) {
                         screen.setCharacter(terminalSize.getColumns() - 3,
-                                curRow, new TextCharacter('e'));
+                                curRow, TextCharacter.fromCharacter('e')[0]);
                     }
                 }
                 curColumn = inventoryLeftColumn;

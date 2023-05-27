@@ -1,6 +1,5 @@
 package roguelike.context;
 
-import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ public class Context {
     public Character getKey() throws IOException {
         return terminal.readInput().getCharacter();
     }
-    public class ReturnResult {
+    public static class ReturnResult {
         public enum EnumResult {
             StartNewGame,
             ContinueGame,

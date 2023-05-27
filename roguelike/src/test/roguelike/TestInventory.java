@@ -1,7 +1,5 @@
 package roguelike;
 
-import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import com.googlecode.lanterna.terminal.Terminal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import roguelike.gameobjects.items.Knife;

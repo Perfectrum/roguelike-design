@@ -5,6 +5,7 @@ import roguelike.gameobjects.items.EquipableItem;
 import roguelike.gameobjects.items.Item;
 
 import java.util.ArrayList;
+import java.util.List;
 /** Хранит координаты где находится игрок,
  *  его характеристики и инвентарь. */
 public class PlayerCharacter extends GameObject {
@@ -99,5 +100,14 @@ public class PlayerCharacter extends GameObject {
         public ArrayList<Item> getItems() {
             return items;
         }
+    }
+
+    TextCharacter[] symbs = TextCharacter.fromString("Oo@o");
+    int animCounter = 0;
+
+    @Override
+    public TextCharacter getSymb() {
+        ++animCounter;
+        return symbs[animCounter % symbs.length];
     }
 }

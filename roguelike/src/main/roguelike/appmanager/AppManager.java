@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 public class AppManager {
     /** Метод, инициализирующий остальные ключевые
-    классы и запускающий их работу. */
+    классы и зcапускающий их работу. */
     public static void main(String[] args) throws InterruptedException, IOException {
         DefaultTerminalFactory defaultTerminalFactory = new DefaultTerminalFactory();
         Terminal terminal = defaultTerminalFactory.createTerminal();

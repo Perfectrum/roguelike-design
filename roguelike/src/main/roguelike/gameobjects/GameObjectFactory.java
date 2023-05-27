@@ -11,11 +11,11 @@ public class GameObjectFactory {
 
     /** Создаёт объект игрока */
     public PlayerCharacter createPlayerCharacter(int x, int y) {
-        return new PlayerCharacter(nextGameObjectId++, x, y, new TextCharacter('@'));
+        return new PlayerCharacter(nextGameObjectId++, x, y, TextCharacter.fromCharacter('@')[0]);
     }
 
     /** Создаёт объект добычи в котором лежит предмет */
     public Loot createLoot(int x, int y, Item item) {
-        return new Loot(nextGameObjectId++, x, y, new TextCharacter('l'), item);
+        return new Loot(nextGameObjectId++, x, y, TextCharacter.fromCharacter('l')[0], item);
     }
 }

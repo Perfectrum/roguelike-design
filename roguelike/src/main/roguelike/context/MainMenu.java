@@ -1,7 +1,5 @@
 package roguelike.context;
 
-import com.googlecode.lanterna.input.KeyStroke;
-import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;

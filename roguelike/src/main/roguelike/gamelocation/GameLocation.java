@@ -17,6 +17,7 @@ public class GameLocation {
 
     GameLocation(int width, int height,
                  ArrayList<ArrayList<TextCharacter>> location) {
+        super();
         this.width = width;
         this.height = height;
         this.location = location;
@@ -24,6 +25,7 @@ public class GameLocation {
     GameLocation(int width, int height,
                  ArrayList<ArrayList<TextCharacter>> location,
                  ArrayList<GameObject> gameObjects) {
+        super();
         this.width = width;
         this.height = height;
         this.location = location;

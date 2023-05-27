@@ -25,14 +25,14 @@ public class GameLocationFactory {
             var line = new ArrayList<TextCharacter>();
             if (i == 0 || i == width - 1) {
                 for (int k = 0; k < height; ++k) {
-                    line.add(new TextCharacter('X'));
+                    line.add(TextCharacter.fromCharacter('X')[0]);
                 }
             } else {
-                line.add(new TextCharacter('X'));
+                line.add(TextCharacter.fromCharacter('X')[0]);
                 for (int k = 1; k < height - 1; ++k) {
-                    line.add(new TextCharacter(' '));
+                    line.add(TextCharacter.fromCharacter(' ')[0]);
                 }
-                line.add(new TextCharacter('X'));
+                line.add(TextCharacter.fromCharacter('X')[0]);
             }
             location.add(line);
         }
@@ -46,20 +46,20 @@ public class GameLocationFactory {
             var line = new ArrayList<TextCharacter>();
             if (i == 0 || i == width - 1) {
                 for (int k = 0; k < height; ++k) {
-                    line.add(new TextCharacter('X'));
+                    line.add(TextCharacter.fromCharacter('X')[0]);
                 }
             } else {
                 int left = (int)(Math.random() * (((double)width) / 5.0));
                 int right = width - 1 - (int)(Math.random() * (((double)width) / 5.0));
-                line.add(new TextCharacter('X'));
+                line.add(TextCharacter.fromCharacter('X')[0]);
                 for (int k = 1; k < height - 1; ++k) {
                     if (k <= left || right <= k) {
-                        line.add(new TextCharacter('X'));
+                        line.add(TextCharacter.fromCharacter('X')[0]);
                     } else {
-                        line.add(new TextCharacter(' '));
+                        line.add(TextCharacter.fromCharacter(' ')[0]);
                     }
                 }
-                line.add(new TextCharacter('X'));
+                line.add(TextCharacter.fromCharacter('X')[0]);
             }
             location.add(line);
         }
@@ -117,12 +117,12 @@ public class GameLocationFactory {
         }
 
         var entranceNextMap = new Entrance(3, 3,
-                new TextCharacter('e'), gameLocation,
+                TextCharacter.fromCharacter('e')[0], gameLocation,
                 entranceFrom.getFrom(),
                 entranceFrom.getX(), entranceFrom.getY());
 
         var entranceNextMapFurther = new Entrance(width - 3, height - 3,
-                new TextCharacter('e'), gameLocation);
+                TextCharacter.fromCharacter('e')[0], gameLocation);
 
         gameLocation.addGameObject(entranceNextMap);
         gameLocation.addGameObject(entranceNextMapFurther);
