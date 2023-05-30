@@ -1,16 +1,16 @@
-import { GameObject } from "../../engine/elements/gameobject";
-import { Animatable } from "../../engine/utils/traits";
+import { GameObject } from '../../engine/elements/gameobject';
+import { Animatable } from '../../engine/utils/traits';
 
-function repeat(sym:string, n:number) {
-    const res:string[] = []
-    while(--n) {
+function repeat(sym: string, n: number) {
+    const res: string[] = [];
+    while (--n) {
         res.push(sym);
     }
     return res;
 }
 
 export class Wall extends GameObject {
-    constructor([x, y]:[number, number]) {
+    constructor([x, y]: [number, number]) {
         super(['wall']);
 
         this.x = x;
@@ -22,9 +22,5 @@ export class Wall extends GameObject {
     }
 
     @Animatable([...repeat('#', 10), ...repeat('%', 10)])
-    override update(_: number): void {
-        
-    }
+    override update(_: number): void {}
 }
-
-

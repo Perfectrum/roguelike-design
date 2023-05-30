@@ -1,26 +1,24 @@
+import { GameObject } from '../../engine/elements/gameobject';
+import { Animatable } from '../../engine/utils/traits';
+import { Hero } from './hero';
 
-import { GameObject } from "../../engine/elements/gameobject";
-import { Animatable } from "../../engine/utils/traits";
-import { Hero } from "./hero";
-
-function repeat(sym:string, n:number) {
-    const res:string[] = []
-    while(--n) {
+function repeat(sym: string, n: number) {
+    const res: string[] = [];
+    while (--n) {
         res.push(sym);
     }
     return res;
 }
 
 export class Mob extends GameObject {
-
     public hp: number;
 
-    constructor([x, y]:[number, number]) {
+    constructor([x, y]: [number, number]) {
         super(['mob', 'danger']);
 
         this.x = x;
         this.y = y;
-        this.content = " ";
+        this.content = ' ';
 
         this.w = 1;
         this.h = 1;
@@ -28,7 +26,7 @@ export class Mob extends GameObject {
         this.hp = 5;
     }
 
-    takeDamage(dhp:number) : number {
+    takeDamage(dhp: number): number {
         this.hp -= dhp;
         if (this.hp <= 0) {
             this.remove();
@@ -45,10 +43,5 @@ export class Mob extends GameObject {
         }
     }
 
-    post(): void {
-        
-    }
+    post(): void {}
 }
-
-
-

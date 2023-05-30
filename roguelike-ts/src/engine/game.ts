@@ -4,12 +4,11 @@ import { PhysicsFunc, createPhysics } from './components/physics';
 import { Scene } from './elements/scene';
 
 export class Game {
-
     private screen;
-    private gameLoop : null | NodeJS.Timer;
+    private gameLoop: null | NodeJS.Timer;
 
-    private time : number = 0;
-    private ticks : number = 0;
+    private time = 0;
+    private ticks = 0;
 
     private render: RenderFunc;
     private calc: PhysicsFunc;
@@ -18,7 +17,7 @@ export class Game {
 
     private scheduledBuisness: (() => void)[];
 
-    constructor(stopSymbols:string[], title = "Rougelike") {
+    constructor(stopSymbols: string[], title = 'Rougelike') {
         this.screen = blessed.screen({
             smartCSR: true
         });
@@ -32,7 +31,7 @@ export class Game {
         this.calc = createPhysics(this.screen);
 
         this.gameLoop = null;
-        
+
         this.time = 0;
         this.ticks = 0;
 
@@ -61,25 +60,24 @@ export class Game {
         }
     }
 
-    private run(dt:number) {
-        this.calc(this.currentScene, dt);  
+    private run(dt: number) {
+        this.calc(this.currentScene, dt);
         this.render(this.currentScene);
         this.doGLobalWork();
     }
-    
-    useScene(scene:Scene) {
 
+    useScene(scene: Scene) {
         const job = () => {
             this.screen.remove(this.currentScene.getBox());
             this.currentScene = scene;
             this.screen.append(scene.getBox());
 
             this.currentScene.init();
-        }
+        };
 
         if (this.gameLoop === null) {
             return job();
-        } 
+        }
 
         this.scheduledBuisness.push(job);
     }
@@ -91,7 +89,7 @@ export class Game {
             this.gameLoop = setInterval(() => {
                 const now = performance.now();
                 this.run(now - this.time);
-                this.time = now; 
+                this.time = now;
                 ++this.ticks;
             }, 100);
         }
@@ -106,7 +104,7 @@ export class Game {
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    changeScene(scene:Scene) {
+    changeScene(scene: Scene) {
         this.useScene(scene);
     }
 

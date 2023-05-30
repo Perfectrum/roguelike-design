@@ -1,18 +1,18 @@
-import { GameObject } from "../../engine/elements/gameobject"
-import { Exit } from "../entites/exit";
-import { Hero } from "../entites/hero";
-import { Loot } from "../entites/loot";
-import { Mob } from "../entites/mob";
-import { Space } from "../entites/space";
-import { Wall } from "../entites/wall";
+import { GameObject } from '../../engine/elements/gameobject';
+import { Exit } from '../entites/exit';
+import { Hero } from '../entites/hero';
+import { Loot } from '../entites/loot';
+import { Mob } from '../entites/mob';
+import { Space } from '../entites/space';
+import { Wall } from '../entites/wall';
 
-export function fromText(text:string) : [ GameObject | null , GameObject[] ] {
-    const objs:GameObject[] = [];
-    let hero:GameObject | null = null;
+export function fromText(text: string): [GameObject | null, GameObject[]] {
+    const objs: GameObject[] = [];
+    let hero: GameObject | null = null;
 
     const lines = text.split('\n');
 
-    let [ x, y ] = [0, 0];
+    let [x, y] = [0, 0];
     for (const line of lines) {
         for (const char of line) {
             if (char === '#') {
@@ -45,8 +45,7 @@ export function fromText(text:string) : [ GameObject | null , GameObject[] ] {
     return [hero, objs];
 }
 
-const testLayout = 
-`
+const testLayout = `
 #####################
 #                   #
 #        l          #
@@ -66,4 +65,4 @@ function testMap() {
 
 export const maps = {
     testMap
-}
+};

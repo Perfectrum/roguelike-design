@@ -1,9 +1,8 @@
-import { Widgets } from "blessed";
-import { Camera } from "../../engine/elements/camera";
+import { Widgets } from 'blessed';
+import { Camera } from '../../engine/elements/camera';
 
-export class MovableCamera extends Camera {;
-
-    constructor(tags?:string[], ops?:Widgets.TextOptions) {
+export class MovableCamera extends Camera {
+    constructor(tags?: string[], ops?: Widgets.TextOptions) {
         super(tags, ops);
     }
 

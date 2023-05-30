@@ -1,12 +1,11 @@
-import blessed, { Widgets } from "blessed";
-import { GameObject } from "./gameobject";
+import blessed, { Widgets } from 'blessed';
+import { GameObject } from './gameobject';
 
 export class Camera extends GameObject {
-
-    protected viewPort : Widgets.TextElement;
+    protected viewPort: Widgets.TextElement;
     protected viewPortBinded: boolean;
 
-    constructor(tags?:string[], options?:Widgets.TextOptions) {
+    constructor(tags?: string[], options?: Widgets.TextOptions) {
         super(tags);
 
         this.w = 3;
@@ -16,14 +15,19 @@ export class Camera extends GameObject {
         this.viewPortBinded = false;
     }
 
-    frameContains(box:[number, number, number, number]) : boolean {
-        const [ x, y, w, h ] = box;
+    frameContains(box: [number, number, number, number]): boolean {
+        const [x, y, w, h] = box;
 
-        const checkPoint = ([x, y]:[number, number]) => {
+        const checkPoint = ([x, y]: [number, number]) => {
             return x >= this.x && x <= this.x + this.w && y >= this.y && y <= this.y + this.h;
-        }
+        };
 
-        return checkPoint([x, y]) || checkPoint([x + w, y]) || checkPoint([x, y + h]) || checkPoint([x + w, y + h]);
+        return (
+            checkPoint([x, y]) ||
+            checkPoint([x + w, y]) ||
+            checkPoint([x, y + h]) ||
+            checkPoint([x + w, y + h])
+        );
     }
 
     bindViewPort() {

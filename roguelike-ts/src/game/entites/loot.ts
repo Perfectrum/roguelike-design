@@ -1,36 +1,35 @@
-import { GameObject } from "../../engine/elements/gameobject";
-import { Hero } from "./hero";
+import { GameObject } from '../../engine/elements/gameobject';
+import { Hero } from './hero';
 
 interface LootCharacteristics {
-    damage: number,
-    armor: number
+    damage: number;
+    armor: number;
 }
 
 export type LootPlace = 'head' | 'rightHand' | 'leftHand' | 'body';
 
 export class Loot extends GameObject {
+    private chs: LootCharacteristics;
+    private name: string;
 
-    private chs:LootCharacteristics;
-    private name:string;
+    public effect: (h: Hero) => void;
 
-    public effect: (h:Hero) => void;
-
-    constructor([x, y]: [number, number], name:string, chs?:Partial<LootCharacteristics>) {
+    constructor([x, y]: [number, number], name: string, chs?: Partial<LootCharacteristics>) {
         super(['loot', 'action']);
 
         this.name = name;
         this.chs = {
-            armor:  chs?.armor || 0,
+            armor: chs?.armor || 0,
             damage: chs?.damage || 0
         };
 
         this.x = x;
         this.y = y;
 
-        this.content = "n";
+        this.content = 'n';
         this.effect = (hero) => {
             hero.heal(5);
-        }
+        };
     }
 
     getName() {
@@ -45,8 +44,5 @@ export class Loot extends GameObject {
         return this.chs.armor;
     }
 
-    update(_: number): void {
-
-    }
-    
+    update(_: number): void {}
 }

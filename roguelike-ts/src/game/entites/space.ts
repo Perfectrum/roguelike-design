@@ -1,12 +1,12 @@
-import { GameObject } from "../../engine/elements/gameobject";
+import { GameObject } from '../../engine/elements/gameobject';
 
 export class Space extends GameObject {
-    constructor([x, y]:[number, number]) {
+    constructor([x, y]: [number, number]) {
         super(['space']);
 
         this.x = x;
         this.y = y;
-        this.content = " ";
+        this.content = ' ';
 
         this.w = 1;
         this.h = 1;
@@ -14,10 +14,5 @@ export class Space extends GameObject {
         this.viewOnly = true;
     }
 
-
-    update(_: number): void {
-
-    }
+    update(_: number): void {}
 }
-
-

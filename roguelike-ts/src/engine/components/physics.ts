@@ -1,17 +1,16 @@
-import { Widgets } from "blessed";
-import { Scene } from "../elements/scene";
-import { GameObject } from "../elements/gameobject";
+import { Widgets } from 'blessed';
+import { Scene } from '../elements/scene';
+import { GameObject } from '../elements/gameobject';
 
-export type PhysicsFunc = (s:Scene, t:number) => void;
+export type PhysicsFunc = (s: Scene, t: number) => void;
 
 type PointWithObject = [number, number, GameObject];
-function findCollisions(points:PointWithObject[]) : GameObject[][] {
-
-    const dict:{[x:number] : {[y:number]:GameObject[]}} = {};
+function findCollisions(points: PointWithObject[]): GameObject[][] {
+    const dict: { [x: number]: { [y: number]: GameObject[] } } = {};
     const result: GameObject[][] = [];
 
     for (const point of points) {
-        const [ x, y, obj ] = point;
+        const [x, y, obj] = point;
         if (dict[x] === undefined) {
             dict[x] = {};
         }
@@ -34,10 +33,10 @@ function findCollisions(points:PointWithObject[]) : GameObject[][] {
     return result;
 }
 
-function markCollision(collisions:GameObject[][], willCollide:boolean) {
+function markCollision(collisions: GameObject[][], willCollide: boolean) {
     for (const batch of collisions) {
         for (let i = 0; i < batch.length; ++i) {
-            const res:GameObject[] = [];
+            const res: GameObject[] = [];
             for (let j = 0; j < batch.length; ++j) {
                 if (i == j) {
                     continue;
@@ -53,22 +52,30 @@ function markCollision(collisions:GameObject[][], willCollide:boolean) {
     }
 }
 
-export function createPhysics(screen:Widgets.Screen) {
-
-    return function (scene:Scene, dt:number) {
+export function createPhysics(screen: Widgets.Screen) {
+    return function (scene: Scene, dt: number) {
         const objs = scene.getPhysicsObjects();
-        
-        const willCollide = findCollisions(objs.map(x => [x.getX() + x.getForce().x, x.getY() + x.getForce().y, x.resetFutureCollision()]));
+
+        const willCollide = findCollisions(
+            objs.map((x) => [
+                x.getX() + x.getForce().x,
+                x.getY() + x.getForce().y,
+                x.resetFutureCollision()
+            ])
+        );
         markCollision(willCollide, true);
 
         for (const obj of objs) {
             obj.update(dt);
         }
 
-        markCollision(findCollisions(objs.map(x => [x.getX(), x.getY(), x.resetCurrentCollision()])), false);
+        markCollision(
+            findCollisions(objs.map((x) => [x.getX(), x.getY(), x.resetCurrentCollision()])),
+            false
+        );
 
         for (const obj of objs) {
             obj.post();
         }
-    }
+    };
 }

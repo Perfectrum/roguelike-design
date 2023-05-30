@@ -1,41 +1,40 @@
-import { Widgets } from "blessed";
+import { Widgets } from 'blessed';
 
-type UIElementFinder = (id:string) => Widgets.BlessedElement | undefined;
-type GameObjectFinder = (tag:string) => GameObject | undefined;
+type UIElementFinder = (id: string) => Widgets.BlessedElement | undefined;
+type GameObjectFinder = (tag: string) => GameObject | undefined;
 
 export class Force {
+    public x: number;
+    public y: number;
 
-    public x:number;
-    public y:number;
-
-    constructor(params?: { x?:number, y?:number }) {
+    constructor(params?: { x?: number; y?: number }) {
         this.x = params?.x || 0;
         this.y = params?.y || 0;
     }
 
     static up(size = 1) {
-        return new Force({ y : -size });
+        return new Force({ y: -size });
     }
 
     static down(size = 1) {
-        return new Force({ y : size });
+        return new Force({ y: size });
     }
 
     static left(size = 1) {
-        return new Force({ x : -size });
+        return new Force({ x: -size });
     }
 
     static right(size = 1) {
-        return new Force({ x : size });
+        return new Force({ x: size });
     }
 }
 
 interface SceneController {
-    findObject: GameObjectFinder,
-    findUI: UIElementFinder,
-    remove: () => void,
-    sendSignal: (msg:string) => void,
-    placeObject: (obj:GameObject) => void
+    findObject: GameObjectFinder;
+    findUI: UIElementFinder;
+    remove: () => void;
+    sendSignal: (msg: string) => void;
+    placeObject: (obj: GameObject) => void;
 }
 
 export abstract class GameObject {
@@ -49,19 +48,19 @@ export abstract class GameObject {
 
     protected content: string;
 
-    protected findObject : GameObjectFinder;
-    protected findUI : UIElementFinder;
+    protected findObject: GameObjectFinder;
+    protected findUI: UIElementFinder;
     public remove: () => void;
-    protected sendSignal : (msg:string) => void;
-    protected placeObject : (obj:GameObject) => void;
+    protected sendSignal: (msg: string) => void;
+    protected placeObject: (obj: GameObject) => void;
 
-    protected force:Force;
+    protected force: Force;
     protected willCollide: GameObject[];
     protected collide: GameObject[];
 
-    public viewOnly:boolean;
+    public viewOnly: boolean;
 
-    protected constructor(tags?:string[]) {
+    protected constructor(tags?: string[]) {
         this.x = 0;
         this.y = 0;
 
@@ -69,13 +68,13 @@ export abstract class GameObject {
         this.h = 1;
 
         this.tags = tags || [];
-        this.content = " ";
+        this.content = ' ';
 
         this.findObject = () => undefined;
         this.findUI = () => undefined;
-        this.remove = () => { };
-        this.sendSignal = () => { };
-        this.placeObject = () => { };
+        this.remove = () => undefined;
+        this.sendSignal = () => undefined;
+        this.placeObject = () => undefined;
 
         this.force = new Force();
 
@@ -85,13 +84,13 @@ export abstract class GameObject {
         this.viewOnly = false;
     }
 
-    init() { }
+    init() {}
 
-    setPredictionCollision(objs:GameObject[]) {
+    setPredictionCollision(objs: GameObject[]) {
         this.willCollide = objs;
     }
 
-    setCurrentCollision(objs:GameObject[]) {
+    setCurrentCollision(objs: GameObject[]) {
         this.collide = objs;
     }
 
@@ -125,49 +124,49 @@ export abstract class GameObject {
         return this.h;
     }
 
-    getCoords() : [number, number] {
+    getCoords(): [number, number] {
         return [this.x, this.y];
     }
 
-    getDrawBox() : [number, number, number, number] {
+    getDrawBox(): [number, number, number, number] {
         return [this.x, this.y, this.w, this.h];
     }
 
-    changeCoordsBy(dx:number, dy:number) {
+    changeCoordsBy(dx: number, dy: number) {
         this.x += dx;
         this.y += dy;
         return this;
     }
 
-    setCoords(x:number, y:number) {
+    setCoords(x: number, y: number) {
         this.x = x;
         this.y = y;
         return this;
     }
 
     getContent() {
-        let content = "";
+        let content = '';
 
         const lines = this.content.split('\n');
         for (let j = 0; j < this.h; ++j) {
-            let curr = "";
+            let curr = '';
             if (j < lines.length) {
                 curr = lines[j];
             }
             content += curr;
             for (let i = curr.length; i < this.w; ++i) {
-                content += " ";
+                content += ' ';
             }
         }
 
         return content;
     }
 
-    setContent(content:string) {
+    setContent(content: string) {
         this.content = content;
     }
 
-    containsTag(tag:string) {
+    containsTag(tag: string) {
         return this.tags.includes(tag);
     }
 
@@ -179,11 +178,11 @@ export abstract class GameObject {
         this.placeObject = controller.placeObject;
     }
 
-    findCollideWith(tag:string) {
-        return this.collide.find(x => x.containsTag(tag));
+    findCollideWith(tag: string) {
+        return this.collide.find((x) => x.containsTag(tag));
     }
 
-    mockOther(other:GameObject|null) {
+    mockOther(other: GameObject | null) {
         if (!other) {
             return;
         }
@@ -192,7 +191,7 @@ export abstract class GameObject {
         this.y = other.getY();
     }
 
-    keyPressed(_:Widgets.Events.IKeyEventArg) { }
-    abstract update(dt:number) : void;
-    post() : void { }
+    keyPressed(_: Widgets.Events.IKeyEventArg) {}
+    abstract update(dt: number): void;
+    post(): void {}
 }

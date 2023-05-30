@@ -1,29 +1,28 @@
-import { Widgets } from "blessed";
-import { Force, GameObject } from "../../engine/elements/gameobject";
-import { Forcable, CanNotCollideWith } from "../../engine/utils/traits";
-import { Loot, LootPlace } from "./loot";
-import { Exit } from "./exit";
-import { Mob } from "./mob";
-import { FireBall } from "./fireball";
+import { Widgets } from 'blessed';
+import { Force, GameObject } from '../../engine/elements/gameobject';
+import { Forcable, CanNotCollideWith } from '../../engine/utils/traits';
+import { Loot, LootPlace } from './loot';
+import { Exit } from './exit';
+import { Mob } from './mob';
+import { FireBall } from './fireball';
 
 export class Hero extends GameObject {
-
     private hp: number;
     private xp: number;
     private level: number;
     private damage: number;
     private armor: number;
 
-    private inventory: Record<LootPlace, Loot | null>
+    private inventory: Record<LootPlace, Loot | null>;
 
-    constructor([x, y] : [number, number]) {
+    constructor([x, y]: [number, number]) {
         super(['hero']);
 
         this.x = x;
         this.y = y;
 
-        this.content ='O';
-        
+        this.content = 'O';
+
         this.w = 1;
         this.h = 1;
 
@@ -56,7 +55,7 @@ export class Hero extends GameObject {
     }
 
     private getResistKoefficient() {
-        return 1 - ((2 / (1 + Math.exp(-6 * this.getArmor() / 200))) - 1);
+        return 1 - (2 / (1 + Math.exp((-6 * this.getArmor()) / 200)) - 1);
     }
 
     override keyPressed(key: Widgets.Events.IKeyEventArg): void {
@@ -117,7 +116,7 @@ export class Hero extends GameObject {
         }
     }
 
-    giveXp(xps:number) {
+    giveXp(xps: number) {
         this.xp += xps;
         if (this.xp > 100) {
             this.level += Math.floor(this.xp / 100);
@@ -128,7 +127,7 @@ export class Hero extends GameObject {
 
     private changeHpUI() {
         let hps = '';
-        let items = Math.round(this.hp / 100 * 10);
+        const items = Math.round((this.hp / 100) * 10);
         let i = 0;
         for (; i < items; ++i) {
             hps += '#';
@@ -137,12 +136,14 @@ export class Hero extends GameObject {
             hps += '-';
         }
 
-        this.findUI('hpBar')?.setContent(`{bold}HP{/bold} [${hps}] ${this.hp.toFixed(0).padStart(3, ' ')}`);
+        this.findUI('hpBar')?.setContent(
+            `{bold}HP{/bold} [${hps}] ${this.hp.toFixed(0).padStart(3, ' ')}`
+        );
     }
 
     private changeXpUI() {
         let xps = '';
-        let items = Math.round(this.xp / 100 * 10);
+        const items = Math.round((this.xp / 100) * 10);
         let i = 0;
         for (; i < items; ++i) {
             xps += '#';
@@ -151,11 +152,13 @@ export class Hero extends GameObject {
             xps += '-';
         }
 
-        this.findUI('xpBar')?.setContent(`{bold}XP{/bold} [${xps}] ${this.xp.toString().padStart(3, ' ')}`);
+        this.findUI('xpBar')?.setContent(
+            `{bold}XP{/bold} [${xps}] ${this.xp.toString().padStart(3, ' ')}`
+        );
         this.findUI('xpTitle')?.setContent(`HERO LEVEL => ${this.level} <=`);
     }
 
-    takeDamage(dhp:number) {
+    takeDamage(dhp: number) {
         this.hp = Math.max(0, this.hp - dhp * this.getResistKoefficient());
         if (this.hp === 0) {
             return this.sendSignal('gameOver');
@@ -163,15 +166,14 @@ export class Hero extends GameObject {
         this.changeHpUI();
     }
 
-    heal(dhp:number) {
+    heal(dhp: number) {
         this.hp = Math.min(100, this.hp + dhp);
         this.changeHpUI();
     }
 
     @CanNotCollideWith(['wall'])
     @Forcable()
-    override update(_: number): void {
-    }
+    override update(_: number): void {}
 
     override post() {
         const action = this.findCollideWith('action');
@@ -182,7 +184,7 @@ export class Hero extends GameObject {
             if (action instanceof Exit) {
                 this.findUI('tip')?.setText(`Use E to teleport to next level!`);
             }
-            this.content = "@";
+            this.content = '@';
 
             return;
         }

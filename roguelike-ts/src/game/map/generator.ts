@@ -1,29 +1,29 @@
-import { fromText } from "./maps";
+import { fromText } from './maps';
 
 interface Box {
-    x:number,
-    y:number,
-    w:number,
-    h:number
+    x: number;
+    y: number;
+    w: number;
+    h: number;
 }
 
 interface Tree {
-    content:Box,
-    left:Tree | null,
-    right:Tree | null
+    content: Box;
+    left: Tree | null;
+    right: Tree | null;
 }
 
 const MIN_ROOM = 15;
 
-function createTree(content:Box, left:Tree|null = null, right:Tree|null = null) : Tree {
+function createTree(content: Box, left: Tree | null = null, right: Tree | null = null): Tree {
     return {
         content,
         left,
         right
-    }
+    };
 }
 
-function splitNode(node?:Tree) : Tree[] {
+function splitNode(node?: Tree): Tree[] {
     if (!node) {
         return [];
     }
@@ -33,55 +33,52 @@ function splitNode(node?:Tree) : Tree[] {
     const hspace = node.content.h - 2 * MIN_ROOM;
 
     const doWCut = () => {
-
         if (wspace <= 0) {
             return [];
         }
 
         const div = Math.round(Math.random() * wspace);
-        
-        node.left = createTree({ 
-            x : node.content.x,
-            y : node.content.y,
-            w : MIN_ROOM + div,
-            h : node.content.h
+
+        node.left = createTree({
+            x: node.content.x,
+            y: node.content.y,
+            w: MIN_ROOM + div,
+            h: node.content.h
         });
 
         node.right = createTree({
-            x : node.content.x + node.left.content.w,
-            y : node.content.y,
-            w : node.content.w - node.left.content.w,
-            h : node.content.h
+            x: node.content.x + node.left.content.w,
+            y: node.content.y,
+            w: node.content.w - node.left.content.w,
+            h: node.content.h
         });
 
         return [node.left, node.right];
-    }
+    };
 
     const doHCut = () => {
-
         if (hspace <= 0) {
             return [];
         }
 
-
         const div = Math.round(Math.random() * hspace);
-        
-        node.left = createTree({ 
-            x : node.content.x,
-            y : node.content.y,
-            w : node.content.w,
-            h : MIN_ROOM + div
+
+        node.left = createTree({
+            x: node.content.x,
+            y: node.content.y,
+            w: node.content.w,
+            h: MIN_ROOM + div
         });
 
         node.right = createTree({
-            x : node.content.x,
-            y : node.content.y + node.left.content.h,
-            w : node.content.w,
-            h : node.content.h - node.left.content.h
+            x: node.content.x,
+            y: node.content.y + node.left.content.h,
+            w: node.content.w,
+            h: node.content.h - node.left.content.h
         });
 
         return [node.left, node.right];
-    }
+    };
 
     if (dir > 0.5) {
         const res = doWCut();
@@ -92,7 +89,7 @@ function splitNode(node?:Tree) : Tree[] {
     }
 }
 
-function getLeafs(tree:Tree|null) : Box[] {
+function getLeafs(tree: Tree | null): Box[] {
     if (!tree) {
         return [];
     }
@@ -104,41 +101,39 @@ function getLeafs(tree:Tree|null) : Box[] {
     return ([] as Box[]).concat(getLeafs(tree.left)).concat(getLeafs(tree.right));
 }
 
-function makeRoades(node:Tree) : Box[] {
-
+function makeRoades(node: Tree): Box[] {
     if (!node.left || !node.right) {
         return [];
     }
 
     const lcx = node.left.content.x + Math.floor(node.left.content.w / 2);
     const lcy = node.left.content.y + Math.floor(node.left.content.h / 2);
-    
+
     const rcx = node.right.content.x + Math.floor(node.right.content.w / 2);
     const rcy = node.right.content.y + Math.floor(node.right.content.h / 2);
 
     if (lcx === rcx) {
-        const box:Box = {
-            x : lcx - 1,
-            y : Math.min(lcy, rcy) - 1,
-            w : 3,
-            h : Math.max(lcy, rcy) - Math.min(lcy, rcy) + 2
+        const box: Box = {
+            x: lcx - 1,
+            y: Math.min(lcy, rcy) - 1,
+            w: 3,
+            h: Math.max(lcy, rcy) - Math.min(lcy, rcy) + 2
         };
 
         return [box].concat(makeRoades(node.left)).concat(makeRoades(node.right));
     } else {
-        const box:Box = {
-            x : Math.min(lcx, rcx) - 1,
-            y : lcy - 1,
-            w : Math.max(lcx, rcx) - Math.min(lcx, rcx) + 2,
-            h : 3
-        }
+        const box: Box = {
+            x: Math.min(lcx, rcx) - 1,
+            y: lcy - 1,
+            w: Math.max(lcx, rcx) - Math.min(lcx, rcx) + 2,
+            h: 3
+        };
 
         return [box].concat(makeRoades(node.left)).concat(makeRoades(node.right));
     }
-
 }
 
-function selectRoom(room:Box) : Box {
+function selectRoom(room: Box): Box {
     const dx = Math.round(Math.random() * (room.w / 3));
     const dy = Math.round(Math.random() * (room.h / 3));
 
@@ -146,15 +141,15 @@ function selectRoom(room:Box) : Box {
     const dh = Math.round(Math.random() * (room.h / 4));
 
     return {
-        x : room.x + dx,
-        y : room.y + dy,
-        w : room.w - dw - dx,
-        h : room.h - dh - dy
-    }
+        x: room.x + dx,
+        y: room.y + dy,
+        w: room.w - dw - dx,
+        h: room.h - dh - dy
+    };
 }
 
-export function generateMap(w:number, h:number, lsize:number, msize:number) {
-    const t = createTree({ x : 0, y : 0, w, h });
+export function generateMap(w: number, h: number, lsize: number, msize: number) {
+    const t = createTree({ x: 0, y: 0, w, h });
     const queue = [t];
     while (queue.length) {
         const item = queue.shift();
@@ -164,10 +159,10 @@ export function generateMap(w:number, h:number, lsize:number, msize:number) {
         }
     }
 
-    const field:string[][] = [];
+    const field: string[][] = [];
 
     for (let j = 0; j <= h; ++j) {
-        const line:string[] = [];
+        const line: string[] = [];
         for (let i = 0; i <= w; ++i) {
             line.push('#');
         }
@@ -190,7 +185,7 @@ export function generateMap(w:number, h:number, lsize:number, msize:number) {
         [1, 1],
         [1, 0],
         [1, -1],
-        [0 , -1],
+        [0, -1],
         [-1, -1],
         [-1, 0],
         [-1, 1]
@@ -202,7 +197,6 @@ export function generateMap(w:number, h:number, lsize:number, msize:number) {
             if (ch === '#') {
                 let inner = true;
                 for (const [dx, dy] of mask) {
-                    
                     const cx = x + dx;
                     const cy = y + dy;
 
@@ -238,18 +232,17 @@ export function generateMap(w:number, h:number, lsize:number, msize:number) {
         field[hy][hx] = '&';
     }
 
-    const placeObjects = (content:string, size:number) => {
+    const placeObjects = (content: string, size: number) => {
         for (let i = 0; i < size; ++i) {
-
             let rounds = 0;
             while (rounds < 50) {
                 ++rounds;
-                const roomIdx =  Math.floor(Math.random() * leafRooms.length);
+                const roomIdx = Math.floor(Math.random() * leafRooms.length);
                 const room = leafRooms[roomIdx];
-    
+
                 const dx = Math.floor(Math.random() * (room.w - 2)) + 1;
                 const dy = Math.floor(Math.random() * (room.h - 2)) + 1;
-    
+
                 if (field[room.y + dy][room.x + dx] !== ' ') {
                     continue;
                 } else {
@@ -258,13 +251,11 @@ export function generateMap(w:number, h:number, lsize:number, msize:number) {
                 }
             }
         }
-    }
+    };
 
     // generate loot
     placeObjects('l', lsize);
     placeObjects('M', msize);
-    
 
-    return fromText(field.map(x => x.join('')).join('\n'));
+    return fromText(field.map((x) => x.join('')).join('\n'));
 }
-

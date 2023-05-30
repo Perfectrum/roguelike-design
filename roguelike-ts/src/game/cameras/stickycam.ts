@@ -1,12 +1,11 @@
-import { Widgets } from "blessed";
-import { Camera } from "../../engine/elements/camera";
-import { GameObject } from "../../engine/elements/gameobject";
+import { Widgets } from 'blessed';
+import { Camera } from '../../engine/elements/camera';
+import { GameObject } from '../../engine/elements/gameobject';
 
 export class ObjectLinkedCamera extends Camera {
+    private hero: GameObject;
 
-    private hero : GameObject;
-
-    constructor(hero: GameObject, tags?:string[], ops?:Widgets.TextOptions) {
+    constructor(hero: GameObject, tags?: string[], ops?: Widgets.TextOptions) {
         super(tags, ops);
 
         this.hero = hero;

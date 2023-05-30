@@ -1,18 +1,17 @@
-import { GameObject } from "../../engine/elements/gameobject";
-import { Animatable, Forcable } from "../../engine/utils/traits";
-import { Hero } from "./hero";
-import { Mob } from "./mob";
+import { GameObject } from '../../engine/elements/gameobject';
+import { Animatable, Forcable } from '../../engine/utils/traits';
+import { Hero } from './hero';
+import { Mob } from './mob';
 
 export class FireBall extends GameObject {
+    private owner: Hero;
 
-    private owner : Hero;
-
-    constructor([x, y, dx, dy]:[number, number, number, number], owner:Hero) {
+    constructor([x, y, dx, dy]: [number, number, number, number], owner: Hero) {
         super(['exit', 'action']);
 
         this.x = x;
         this.y = y;
-        this.content = "*";
+        this.content = '*';
 
         this.w = 1;
         this.h = 1;
@@ -23,9 +22,9 @@ export class FireBall extends GameObject {
         this.owner = owner;
     }
 
-    @Animatable(["*", "o"])
+    @Animatable(['*', 'o'])
     @Forcable(true)
-    update(_: number): void { }
+    update(_: number): void {}
 
     post(): void {
         for (const objs of this.collide) {
@@ -43,5 +42,3 @@ export class FireBall extends GameObject {
         }
     }
 }
-
-
