@@ -1,0 +1,27 @@
+{
+  "name": "roguelike-ts",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "beautify": "npm run format && npm run lint",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --config .prettierrc.json 'src/**/*.ts' --write",
+    "dev": "tsc -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "blessed": "^0.1.81"
+  },
+  "devDependencies": {
+    "@types/blessed": "^0.1.22",
+    "@types/node": "^18.13.0",
+    "eslint": "^8.34.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.4",
+    "typescript": "^5.0.4"
+  }
+}
