@@ -1,4 +1,4 @@
-import { GameObject } from '../../engine/elements/gameobject';
+import { GameObject } from '../../../engine/elements/gameobject';
 
 export class Space extends GameObject {
     constructor([x, y]: [number, number]) {

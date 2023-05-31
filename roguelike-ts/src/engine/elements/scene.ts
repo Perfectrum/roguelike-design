@@ -7,7 +7,9 @@ type ViewPortEntity = {
     y: number;
     w: number;
     h: number;
+    z: number;
 
+    tags: [string, string];
     content: string;
 };
 
@@ -86,9 +88,12 @@ export class Scene {
                 .map((obj) => ({
                     x: obj.getX() - camera.getX(),
                     y: obj.getY() - camera.getY(),
+                    z: obj.getZ(),
+
                     w: obj.getW(),
                     h: obj.getH(),
 
+                    tags: obj.getContentStyle(),
                     content: obj.getContent()
                 }));
 

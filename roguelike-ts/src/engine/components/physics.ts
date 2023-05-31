@@ -2,7 +2,7 @@ import { Widgets } from 'blessed';
 import { Scene } from '../elements/scene';
 import { GameObject } from '../elements/gameobject';
 
-export type PhysicsFunc = (s: Scene, t: number) => void;
+export type PhysicsFunc = (s: Scene, t: number, c: number) => void;
 
 type PointWithObject = [number, number, GameObject];
 function findCollisions(points: PointWithObject[]): GameObject[][] {
@@ -53,7 +53,7 @@ function markCollision(collisions: GameObject[][], willCollide: boolean) {
 }
 
 export function createPhysics(screen: Widgets.Screen) {
-    return function (scene: Scene, dt: number) {
+    return function (scene: Scene, dt: number, ticks: number) {
         const objs = scene.getPhysicsObjects();
 
         const willCollide = findCollisions(
@@ -67,6 +67,9 @@ export function createPhysics(screen: Widgets.Screen) {
 
         for (const obj of objs) {
             obj.update(dt);
+            if (ticks % obj.getUpdateRate() === 0) {
+                obj.rateUpdate();
+            }
         }
 
         markCollision(

@@ -232,12 +232,13 @@ export function generateMap(w: number, h: number, lsize: number, msize: number) 
         field[hy][hx] = '&';
     }
 
-    const placeObjects = (content: string, size: number) => {
+    const placeObjects = (content: string, size: number, fromRoom = 0) => {
         for (let i = 0; i < size; ++i) {
             let rounds = 0;
             while (rounds < 50) {
                 ++rounds;
-                const roomIdx = Math.floor(Math.random() * leafRooms.length);
+                const roomIdx =
+                    Math.floor(Math.random() * (leafRooms.length - fromRoom)) + fromRoom;
                 const room = leafRooms[roomIdx];
 
                 const dx = Math.floor(Math.random() * (room.w - 2)) + 1;
@@ -255,7 +256,7 @@ export function generateMap(w: number, h: number, lsize: number, msize: number) 
 
     // generate loot
     placeObjects('l', lsize);
-    placeObjects('M', msize);
+    placeObjects('M', msize, 1);
 
     return fromText(field.map((x) => x.join('')).join('\n'));
 }

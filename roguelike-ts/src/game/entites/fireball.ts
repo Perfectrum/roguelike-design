@@ -1,7 +1,7 @@
 import { GameObject } from '../../engine/elements/gameobject';
 import { Animatable, Forcable } from '../../engine/utils/traits';
 import { Hero } from './hero';
-import { Mob } from './mob';
+import { Mob } from './mobs/mob';
 
 export class FireBall extends GameObject {
     private owner: Hero;
@@ -12,6 +12,7 @@ export class FireBall extends GameObject {
         this.x = x;
         this.y = y;
         this.content = '*';
+        this.contentBraces = ['{#ff5f00-fg}', '{/}'];
 
         this.w = 1;
         this.h = 1;
@@ -36,6 +37,10 @@ export class FireBall extends GameObject {
                 if (objs instanceof Mob) {
                     this.owner.giveXp(objs.takeDamage(3));
                     this.remove();
+                    if (objs.killed) {
+                        this.owner.statistics.mobs += 1;
+                        this.owner.statistics.score += objs.killScore();
+                    }
                     return;
                 }
             }

@@ -61,7 +61,7 @@ export class Game {
     }
 
     private run(dt: number) {
-        this.calc(this.currentScene, dt);
+        this.calc(this.currentScene, dt, this.ticks);
         this.render(this.currentScene);
         this.doGLobalWork();
     }

@@ -1,4 +1,4 @@
-import { GameObject } from '../../engine/elements/gameobject';
+import { GameObject } from '../../../engine/elements/gameobject';
 
 export class Exit extends GameObject {
     constructor([x, y]: [number, number]) {
@@ -10,8 +10,9 @@ export class Exit extends GameObject {
 
         this.w = 1;
         this.h = 1;
+
+        this.contentBraces = ['{#5f00ff-fg}', '{/}'];
     }
 
-    
     update(_: number): void {}
 }

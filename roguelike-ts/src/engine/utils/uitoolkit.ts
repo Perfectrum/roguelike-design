@@ -81,7 +81,7 @@ export const $ = {
         (camera: Camera): ToolKitItem => ({ elements: [], cameras: [camera], storage: {} }),
     text: (ops?: Widgets.TextOptions & { id?: string }) => (text: string) => {
         const e = blessed.text(ops);
-        e.setText(text);
+        e.setContent(text);
         return elem(e, ops?.id);
     },
     textbox: (ops?: Widgets.TextboxOptions) => () => {

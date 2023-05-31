@@ -16,11 +16,11 @@ export function createRender(screen: Widgets.Screen) {
                 continue;
             }
 
-            const text: string[][] = [];
+            const text: [string, number][][] = [];
             for (let i = 0; i < element.height; ++i) {
-                const line: string[] = [];
+                const line: [string, number][] = [];
                 for (let j = 0; j < element.width; ++j) {
-                    line.push('.');
+                    line.push(['.', -1]);
                 }
                 text.push(line);
             }
@@ -41,12 +41,17 @@ export function createRender(screen: Widgets.Screen) {
                         if (idx < 0 || idx >= obj.content.length) {
                             continue;
                         }
-                        text[obj.y + j][obj.x + i] = obj.content[j * obj.w + i];
+
+                        const cell = text[obj.y + j][obj.x + i];
+                        if (cell[1] <= obj.z) {
+                            cell[0] = `${obj.tags[0]}${obj.content[j * obj.w + i]}${obj.tags[1]}`;
+                            cell[1] = obj.z;
+                        }
                     }
                 }
             }
 
-            element.setText(text.map((x) => x.join('')).join('\n'));
+            element.setContent(text.map((x) => x.map(([t, _]) => t).join('')).join('\n'));
         }
 
         screen.render();

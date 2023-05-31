@@ -1,13 +1,6 @@
-import { GameObject } from '../../engine/elements/gameobject';
-import { Animatable } from '../../engine/utils/traits';
-
-function repeat(sym: string, n: number) {
-    const res: string[] = [];
-    while (--n) {
-        res.push(sym);
-    }
-    return res;
-}
+import { GameObject } from '../../../engine/elements/gameobject';
+import { Animatable } from '../../../engine/utils/traits';
+import { repeat } from '../../../engine/utils/traits/animable';
 
 export class Wall extends GameObject {
     constructor([x, y]: [number, number]) {

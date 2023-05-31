@@ -1,10 +1,65 @@
 import { GameObject } from '../../engine/elements/gameobject';
-import { Exit } from '../entites/exit';
+import { Random } from '../../engine/utils/random';
+import { Exit, Space, Wall } from '../entites/env';
 import { Hero } from '../entites/hero';
-import { Loot } from '../entites/loot';
-import { Mob } from '../entites/mob';
-import { Space } from '../entites/space';
-import { Wall } from '../entites/wall';
+import { Heal, Loot, Weapon } from '../entites/items';
+import { LootPlace } from '../entites/items/amunition';
+import { FireBallLoot } from '../entites/items/fbloot';
+import { HealSize } from '../entites/items/heal';
+import { LootCharacteristics } from '../entites/items/loot';
+import { Bat } from '../entites/mobs';
+import { Urglorg } from '../entites/mobs/urglorg';
+
+type WeaponDescriber = [LootPlace, string, Partial<LootCharacteristics>];
+const weapons: WeaponDescriber[] = [
+    ['rightHand', 'Sword', { damage: 3 }],
+    ['rightHand', 'Dagger', { damage: 1 }],
+    ['leftHand', 'Shield', { armor: 5 }],
+    ['leftHand', 'Left Hand Dagger', { damage: 1 }],
+    ['rightHand', 'Book', { damage: 0 }],
+    ['leftHand', 'Magic Book', { damage: 2, armor: 5 }],
+
+    ['head', 'Simple Helmet', { armor: 3 }],
+    ['head', 'German Helmet', { armor: 3, damage: 1 }],
+    ['head', 'Headband', { armor: 1 }],
+
+    ['body', 'T-Shirt', { armor: 1 }],
+    ['body', 'Chain Mail', { armor: 10 }],
+    ['body', 'Blade Mail', { armor: 10, damage: 1 }]
+];
+
+function randomWeaponLoot(point: [number, number]): Loot {
+    const idx = Math.floor(Math.random() * weapons.length);
+    const record = weapons[idx];
+    return new Weapon(point, ...record);
+}
+
+const healDist: [HealSize, number][] = [
+    ['Small', 7],
+    ['Medium', 2],
+    ['Big', 1]
+];
+
+function randomPotionLoot(point: [number, number]): Loot {
+    const size = Random.pickWithWeight(healDist);
+    return new Heal(point, size);
+}
+
+function randomFireBallLoot(point: [number, number]): Loot {
+    const count = Math.ceil(Math.random() * 10);
+    return new FireBallLoot(point, count);
+}
+
+const lootDist: [(point: [number, number]) => Loot, number][] = [
+    [randomWeaponLoot, 3],
+    [randomPotionLoot, 5],
+    [randomFireBallLoot, 5]
+];
+
+function randomLoot(point: [number, number]): Loot {
+    const func = Random.pickWithWeight(lootDist);
+    return func(point);
+}
 
 export function fromText(text: string): [GameObject | null, GameObject[]] {
     const objs: GameObject[] = [];
@@ -24,7 +79,7 @@ export function fromText(text: string): [GameObject | null, GameObject[]] {
             }
             if (char === 'l') {
                 objs.splice(0, 0, new Space([x, y]));
-                objs.push(new Loot([x, y], 'loot'));
+                objs.push(randomLoot([x, y]));
             }
             if (char === ' ') {
                 objs.splice(0, 0, new Space([x, y]));
@@ -34,7 +89,7 @@ export function fromText(text: string): [GameObject | null, GameObject[]] {
             }
             if (char === 'M') {
                 objs.splice(0, 0, new Space([x, y]));
-                objs.push(new Mob([x, y]));
+                objs.push(new Urglorg([x, y]));
             }
             ++x;
         }
@@ -44,25 +99,3 @@ export function fromText(text: string): [GameObject | null, GameObject[]] {
 
     return [hero, objs];
 }
-
-const testLayout = `
-#####################
-#                   #
-#        l          #
-#                   #
-#    l              #  
-#         @         #
-#                   #
-#             l     #
-#    l              #
-#                   #
-#####################
-`;
-
-function testMap() {
-    return fromText(testLayout);
-}
-
-export const maps = {
-    testMap
-};

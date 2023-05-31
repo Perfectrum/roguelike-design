@@ -11,7 +11,7 @@ export class Camera extends GameObject {
         this.w = 3;
         this.h = 3;
 
-        this.viewPort = blessed.text(options);
+        this.viewPort = blessed.text({ tags: true, ...options });
         this.viewPortBinded = false;
     }
 

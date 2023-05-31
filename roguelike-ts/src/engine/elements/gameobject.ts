@@ -40,12 +40,14 @@ interface SceneController {
 export abstract class GameObject {
     protected x: number;
     protected y: number;
+    protected z: number;
 
     protected w: number;
     protected h: number;
 
     protected tags: string[];
 
+    protected contentBraces: [string, string];
     protected content: string;
 
     protected findObject: GameObjectFinder;
@@ -60,9 +62,12 @@ export abstract class GameObject {
 
     public viewOnly: boolean;
 
+    protected rate: number;
+
     protected constructor(tags?: string[]) {
         this.x = 0;
         this.y = 0;
+        this.z = 0;
 
         this.w = 1;
         this.h = 1;
@@ -82,9 +87,16 @@ export abstract class GameObject {
         this.collide = [];
 
         this.viewOnly = false;
+
+        this.contentBraces = ['', ''];
+        this.rate = 1;
     }
 
     init() {}
+
+    getUpdateRate() {
+        return this.rate;
+    }
 
     setPredictionCollision(objs: GameObject[]) {
         this.willCollide = objs;
@@ -116,6 +128,10 @@ export abstract class GameObject {
         return this.y;
     }
 
+    getZ() {
+        return this.z;
+    }
+
     getW() {
         return this.w;
     }
@@ -142,6 +158,10 @@ export abstract class GameObject {
         this.x = x;
         this.y = y;
         return this;
+    }
+
+    getContentStyle() {
+        return this.contentBraces;
     }
 
     getContent() {
@@ -194,4 +214,5 @@ export abstract class GameObject {
     keyPressed(_: Widgets.Events.IKeyEventArg) {}
     abstract update(dt: number): void;
     post(): void {}
+    rateUpdate(): void {}
 }

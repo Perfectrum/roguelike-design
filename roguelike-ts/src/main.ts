@@ -5,13 +5,13 @@ import { generateMap } from './game/map/generator';
 import { screens } from './game/screen/screens';
 
 function main() {
-    const game = new Game(['escape', 'C-c', 'q']);
+    const game = new Game(['escape', 'C-c']);
 
     let hero: GameObject | null = null;
     let player = '';
 
     const loadScene = () => {
-        const [h, objs] = generateMap(50, 50, 10, 30);
+        const [h, objs] = generateMap(50, 50, 50, 50);
         if (!h) {
             return;
         }
@@ -32,7 +32,11 @@ function main() {
                     return loadScene();
                 }
                 if (msg === 'gameOver') {
-                    return game.changeScene(screens.gameOverScreen());
+                    const finalScene = screens.gameOverScreen(player);
+                    if (hero) {
+                        finalScene.add(hero);
+                    }
+                    return game.changeScene(finalScene);
                 }
             }
         );
@@ -47,6 +51,7 @@ function main() {
     });
 
     game.changeScene(hello);
+    // game.changeScene(screens.gameOverScreen(player))
     game.start();
 }
 

@@ -19,3 +19,11 @@ export function Animatable(anim: string[]) {
         return descriptor;
     };
 }
+
+export function repeat(sym: string, n: number) {
+    const res: string[] = [];
+    while (--n) {
+        res.push(sym);
+    }
+    return res;
+}
