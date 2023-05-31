@@ -12,5 +12,6 @@ export class Exit extends GameObject {
         this.h = 1;
     }
 
+    
     update(_: number): void {}
 }

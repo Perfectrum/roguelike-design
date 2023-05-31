@@ -50,7 +50,7 @@ const testLayout = `
 #                   #
 #        l          #
 #                   #
-#    l              #
+#    l              #  
 #         @         #
 #                   #
 #             l     #

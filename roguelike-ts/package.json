@@ -1,13 +1,14 @@
 {
-  "name": "roguelike-ts",
-  "version": "1.0.0",
-  "description": "",
+  "name": "dnmse",
+  "version": "0.8.0",
+  "description": "Dangeon & ITMO MSE -- software design roguelike game project",
   "scripts": {
     "beautify": "npm run format && npm run lint",
     "lint": "eslint . --ext .ts",
     "format": "prettier --config .prettierrc.json 'src/**/*.ts' --write",
     "dev": "tsc -w"
   },
+  "bin": "build/bin.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
