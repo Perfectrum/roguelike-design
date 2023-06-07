@@ -1,3 +1,7 @@
+import { AbstractMobFactory } from '../entites/mobs/abstractMobFactory';
+import { ApocalypseMobFactory } from '../entites/mobs/apocalypse/apocalypseMobFactory';
+import { CyberpunkMobFactory } from '../entites/mobs/cyberpunk/cyberpunkMobFactory';
+import { FantasyMobFactory } from '../entites/mobs/fantasy/fantasyMobFactory';
 import { fromText } from './maps';
 
 interface Box {
@@ -148,7 +152,7 @@ function selectRoom(room: Box): Box {
     };
 }
 
-export function generateMap(w: number, h: number, lsize: number, msize: number) {
+export function generateMap(w: number, h: number, lootAmount: number, mobAmount: number) {
     const t = createTree({ x: 0, y: 0, w, h });
     const queue = [t];
     while (queue.length) {
@@ -232,8 +236,8 @@ export function generateMap(w: number, h: number, lsize: number, msize: number) 
         field[hy][hx] = '&';
     }
 
-    const placeObjects = (content: string, size: number, fromRoom = 0) => {
-        for (let i = 0; i < size; ++i) {
+    const placeObjects = (content: string, amount: number, fromRoom = 0) => {
+        for (let i = 0; i < amount; ++i) {
             let rounds = 0;
             while (rounds < 50) {
                 ++rounds;
@@ -254,9 +258,42 @@ export function generateMap(w: number, h: number, lsize: number, msize: number) 
         }
     };
 
+    const placeMobs = (mobFactory: typeof AbstractMobFactory, amount: number, fromRoom = 0) => {
+        for (let i = 0; i < amount; ++i) {
+            let rounds = 0;
+            while (rounds < 50) {
+                ++rounds;
+                const roomIdx =
+                    Math.floor(Math.random() * (leafRooms.length - fromRoom)) + fromRoom;
+                const room = leafRooms[roomIdx];
+
+                const dx = Math.floor(Math.random() * (room.w - 2)) + 1;
+                const dy = Math.floor(Math.random() * (room.h - 2)) + 1;
+
+                if (field[room.y + dy][room.x + dx] !== ' ') {
+                    continue;
+                } else {
+                    field[room.y + dy][room.x + dx] = mobFactory.createMobSign();
+                    break;
+                }
+            }
+        }
+    };
+
     // generate loot
-    placeObjects('l', lsize);
-    placeObjects('M', msize, 1);
+    placeObjects('l', lootAmount);
+
+    switch (Math.floor(Math.random() * 3)) {
+        case 0:
+            placeMobs(FantasyMobFactory, mobAmount, 1);
+            break;
+        case 1:
+            placeMobs(ApocalypseMobFactory, mobAmount, 1);
+            break;
+        case 2:
+            placeMobs(CyberpunkMobFactory, mobAmount, 1);
+            break;
+    }
 
     return fromText(field.map((x) => x.join('')).join('\n'));
 }

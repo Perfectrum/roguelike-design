@@ -1,21 +1,36 @@
 import { GameObject } from '../../../engine/elements/gameobject';
-import { Animatable } from '../../../engine/utils/traits';
-import { repeat } from '../../../engine/utils/traits/animable';
-import { Hero } from '../hero';
+import { Behavior, Panic, Ignore } from './behavior';
 
 export abstract class Mob extends GameObject {
+    public behaviorState: Behavior;
+    public defaultBehaviorState: Behavior;
+
+    protected initX: number;
+    protected initY: number;
+
     public hp: number;
     public damage: number;
     public killed: boolean;
+    public visionRange: number;
 
     public name: string;
 
     constructor([x, y]: [number, number], name: string) {
         super(['mob', 'danger']);
+        this.defaultBehaviorState = new Ignore(
+            this,
+            (mob: Mob) => mob.hp <= mob.maxHP() * 0.3,
+            new Panic(this, (mob: Mob) => mob.hp > mob.maxHP() * 0.3)
+        );
+        this.behaviorState = this.defaultBehaviorState;
+
+        this.initX = x;
+        this.initY = y;
 
         this.x = x;
         this.y = y;
         this.z = 4;
+        this.visionRange = 10;
         this.content = ' ';
 
         this.w = 1;
@@ -33,6 +48,11 @@ export abstract class Mob extends GameObject {
     abstract killXP(): number;
     abstract damageXP(): number;
 
+    public push([x, y]: [number, number]): void {
+        this.force.x = x;
+        this.force.y = y;
+    }
+
     killScore() {
         return 11;
     }
@@ -45,6 +65,29 @@ export abstract class Mob extends GameObject {
         return this.name;
     }
 
+    getInitX() {
+        return this.initX;
+    }
+
+    getInitY() {
+        return this.initY;
+    }
+
+    public distanceTo(target: GameObject): number {
+        return Math.abs(target.getX() - this.x) + Math.abs(target.getY() - this.y);
+    }
+
+    public lookFor(target: string) {
+        const obj = this.findObject(target);
+        if (!obj) {
+            return undefined;
+        }
+
+        if (this.distanceTo(obj) <= this.visionRange) {
+            return obj;
+        }
+    }
+
     takeDamage(dhp: number): number {
         this.hp -= dhp;
         if (this.hp <= 0) {
@@ -55,12 +98,5 @@ export abstract class Mob extends GameObject {
         return this.damageXP();
     }
 
-    update(_: number): void {
-        const hero = this.findCollideWith('hero');
-        if (hero && hero instanceof Hero) {
-            hero.takeDamage(this.damage);
-        }
-    }
-
-    post(): void {}
+    abstract update(t: number): void;
 }

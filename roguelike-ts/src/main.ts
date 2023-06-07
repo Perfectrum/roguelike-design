@@ -11,7 +11,7 @@ function main() {
     let player = '';
 
     const loadScene = () => {
-        const [h, objs] = generateMap(50, 50, 50, 50);
+        const [h, objs] = generateMap(50, 50, 50, 10);
         if (!h) {
             return;
         }
