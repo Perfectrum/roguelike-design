@@ -45,13 +45,35 @@ export class Scene {
         this.cameras.push(camera);
     }
 
+    private findObjsByCoords(x:number, y:number, w:number, h:number) : GameObject[] {
+
+        const testPoint = ([a, b]: [number, number]) => {
+            return a >= x && a <= x + w && b >= y && b <= y + h; 
+        }
+
+        const testObj = (obj:GameObject) => {
+            const [ ox, oy, ow, oh ] = obj.getDrawBox();
+            return testPoint([ox, oy]) || testPoint([ox + ow, oy]) || testPoint([ox, oy + oh]) || testPoint([ox + ow, oy + oh]);
+        }
+
+        const result: GameObject[] = [];
+        for (const object of this.objects) {
+           
+            if (testObj(object)) {
+                result.push(object);
+            }
+        }
+        return result;
+    }
+
     add(object: GameObject) {
         object.bind({
             findObject: (tag) => this.objects.find((x) => x.containsTag(tag)),
             findUI: (id) => this.storage[id],
             remove: () => this.remove(object),
             sendSignal: (msg) => this.event(msg),
-            placeObject: (obj) => this.add(obj)
+            placeObject: (obj) => this.add(obj),
+            findObjectByCoords: (x, y, w, h) => this.findObjsByCoords(x, y, w, h)
         });
         this.objects.push(object);
         object.init();

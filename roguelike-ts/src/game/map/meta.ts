@@ -13,12 +13,15 @@ export class MapMeta {
         string,
         Record<string, (AbstractMobFactory: AbstractMobFactory, point: [number, number]) => Mob>
     >;
+    public spaceMarks: Set<string>;
 
     public constructor() {
+
+        this.spaceMarks = new Set(['#', '$']);
+
         this.heroMark = '@';
 
         this.envMapping = {
-            ' ': (point) => new Space(point),
             '#': (point) => new Wall(point),
             '&': (point) => new Exit(point)
         };

@@ -6,7 +6,7 @@ import { screens } from './game/screen/screens';
 import blessed from 'blessed'
 
 function main() {
-    const game = new Game(['escape', 'C-c'], blessed.screen({ smartCSR: true }));
+    const game = new Game(['escape', 'C-c'], blessed.screen({ smartCSR: true, debug: true }));
 
     let hero: GameObject | null = null;
     let player = '';

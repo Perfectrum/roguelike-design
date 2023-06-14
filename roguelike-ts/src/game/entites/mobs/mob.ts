@@ -1,4 +1,5 @@
 import { GameObject } from '../../../engine/elements/gameobject';
+import { Space } from '../env';
 import { Behavior, Panic, Ignore } from './behavior';
 
 export abstract class Mob extends GameObject {
@@ -77,6 +78,10 @@ export abstract class Mob extends GameObject {
         return Math.abs(target.getX() - this.x) + Math.abs(target.getY() - this.y);
     }
 
+    public lookForPure(target: string) {
+        return this.findObject(target);
+    }
+
     public lookFor(target: string) {
         const obj = this.findObject(target);
         if (!obj) {
@@ -86,6 +91,11 @@ export abstract class Mob extends GameObject {
         if (this.distanceTo(obj) <= this.visionRange) {
             return obj;
         }
+    }
+
+    public getFloor()  {
+        const objs = this.findObjectByCoords(this.getX(), this.getY(), 0, 0);
+        return objs.find(x => x.containsTag('space'))! as Space;
     }
 
     takeDamage(dhp: number): number {
