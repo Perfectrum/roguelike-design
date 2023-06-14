@@ -3,9 +3,10 @@ import { Game } from './engine/game';
 import { ObjectLinkedCamera } from './game/cameras/stickycam';
 import { generateMap } from './game/map/generator';
 import { screens } from './game/screen/screens';
+import blessed from 'blessed'
 
 function main() {
-    const game = new Game(['escape', 'C-c']);
+    const game = new Game(['escape', 'C-c'], blessed.screen({ smartCSR: true }));
 
     let hero: GameObject | null = null;
     let player = '';

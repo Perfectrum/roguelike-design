@@ -3,6 +3,15 @@ import { RenderFunc, createRender } from './components/graphics';
 import { PhysicsFunc, createPhysics } from './components/physics';
 import { Scene } from './elements/scene';
 
+export interface ScreenLike {
+    title: string;
+    key(keys:string[], action:(() => any)):void;
+    append(node:blessed.Widgets.BoxElement):void;
+    remove(node:blessed.Widgets.BoxElement):void;
+    on(event: string, listener: (ch: any, key: blessed.Widgets.Events.IKeyEventArg) => void): this;
+    render():void;
+}
+
 export class Game {
     private screen;
     private gameLoop: null | NodeJS.Timer;
@@ -17,10 +26,10 @@ export class Game {
 
     private scheduledBuisness: (() => void)[];
 
-    constructor(stopSymbols: string[], title = 'Rougelike') {
-        this.screen = blessed.screen({
-            smartCSR: true
-        });
+    constructor(stopSymbols: string[], screen:ScreenLike, title = 'Rougelike') {
+        this.screen = screen /* blessed.screen({
+            smartCSR: true,
+        }); */
         this.screen.title = title;
 
         this.screen.key(stopSymbols, () => {
@@ -28,7 +37,7 @@ export class Game {
         });
 
         this.render = createRender(this.screen);
-        this.calc = createPhysics(this.screen);
+        this.calc = createPhysics();
 
         this.gameLoop = null;
 

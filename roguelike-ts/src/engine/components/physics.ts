@@ -52,7 +52,7 @@ function markCollision(collisions: GameObject[][], willCollide: boolean) {
     }
 }
 
-export function createPhysics(screen: Widgets.Screen) {
+export function createPhysics() {
     return function (scene: Scene, dt: number, ticks: number) {
         const objs = scene.getPhysicsObjects();
 
