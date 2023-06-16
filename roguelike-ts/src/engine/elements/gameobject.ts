@@ -209,11 +209,13 @@ export abstract class GameObject {
 
     mockOther(other: GameObject | null) {
         if (!other) {
-            return;
+            return this;
         }
 
         this.x = other.getX();
         this.y = other.getY();
+
+        return this;
     }
 
     keyPressed(_: Widgets.Events.IKeyEventArg) {}
