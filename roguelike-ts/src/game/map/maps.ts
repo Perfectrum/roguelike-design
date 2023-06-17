@@ -13,7 +13,19 @@ import { CyberpunkMobFactory } from '../entites/mobs/cyberpunk/cyberpunkMobFacto
 import { MapMeta } from './meta';
 import { AbstractMobFactory } from '../entites/mobs/abstractMobFactory';
 
+/**
+ * Описание оружия
+ * @typedef {Array} WeaponDescriber
+ * @property {LootPlace} - Место на теле для ношения
+ * @property {string} - Название
+ * @property {Partial<LootCharacteristics>} - Характеристики оружия
+ */
 type WeaponDescriber = [LootPlace, string, Partial<LootCharacteristics>];
+
+/**
+ * Массив с описаниями оружия
+ * @type {WeaponDescriber[]}
+ */
 const weapons: WeaponDescriber[] = [
     ['rightHand', 'Sword', { damage: 3 }],
     ['rightHand', 'Dagger', { damage: 1 }],
@@ -31,39 +43,73 @@ const weapons: WeaponDescriber[] = [
     ['body', 'Blade Mail', { armor: 10, damage: 1 }]
 ];
 
+/**
+ * Генерирует случайное оружие
+ * @param {number[]} point - Координаты генеерации
+ * @returns {Loot} - Лут с оружием
+ */
 function randomWeaponLoot(point: [number, number]): Loot {
     const idx = Math.floor(Math.random() * weapons.length);
     const record = weapons[idx];
     return new Weapon(point, ...record);
 }
 
+/**
+ * Массив с описаниями эликсиров и их весами
+ * @type {[HealSize, number][]}
+ */
 const healDist: [HealSize, number][] = [
     ['Small', 7],
     ['Medium', 2],
     ['Big', 1]
 ];
 
+/**
+ * Генерирует случайный элексир здоровья
+ * @param {number[]} point - Координаты генерации
+ * @returns {Loot} - Лут с эликсиром
+ */
 function randomPotionLoot(point: [number, number]): Loot {
     const size = Random.pickWithWeight(healDist);
     return new Heal(point, size);
 }
 
+/**
+ * Генерирует случайное количество фаерболов
+ * @param {number[]} point - Координаты генерации
+ * @returns {Loot} - Лут с фаерболами
+ */
 function randomFireBallLoot(point: [number, number]): Loot {
     const count = Math.ceil(Math.random() * 10);
     return new FireBallLoot(point, count);
 }
 
+/**
+ * Массив с генераторами случайного лута и их весами
+ * @type {[(point: [number, number]) => Loot, number][]}
+ */
 const lootDist: [(point: [number, number]) => Loot, number][] = [
     [randomWeaponLoot, 3],
     [randomPotionLoot, 5],
     [randomFireBallLoot, 5]
 ];
 
+/**
+ * Генерирует случайный лут
+ * @param {number[]} point - Координаты генерации
+ * @returns {Loot} - Лут
+ */
 export function randomLoot(point: [number, number]): Loot {
     const func = Random.pickWithWeight(lootDist);
     return func(point);
 }
 
+/**
+ * Генерирует карту из текстового представления
+ * @param {string} text - Текстовое представление карты
+ * @param {MapMeta} meta - Метаданные карты
+ * @returns {[GameObject | null, GameObject[]]} - Сгенерированная карта
+ */
 export function fromText(
     text: string,
     meta: MapMeta = new MapMeta()

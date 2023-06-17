@@ -4,6 +4,7 @@ import { Harpy } from './harpy';
 import { Ork } from './ork';
 import { Ent } from './ent';
 
+
 export class FantasyMobFactory extends AbstractMobFactory {
     static createMobSign() {
         const mobTypes: string[] = ['O', 'G', 'E'];

@@ -1,6 +1,15 @@
 import { GameObject } from '../../../engine/elements/gameobject';
 
+/**
+ * Класс пустого пространства в игре
+ * @extends GameObject
+ */
 export class Space extends GameObject {
+    /**
+     * Создает новый экземпляр пустого пространства
+     * @param {number} x - Координата x
+     * @param {number} y - Координата y
+     */
     constructor([x, y]: [number, number]) {
         super(['space']);
 

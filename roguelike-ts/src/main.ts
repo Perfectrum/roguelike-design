@@ -4,12 +4,21 @@ import { ObjectLinkedCamera } from './game/cameras/stickycam';
 import { generateMap } from './game/map/generator';
 import { screens } from './game/screen/screens';
 
+
+/**
+ * Точка входа в программу
+ * Она создает экземпляр игры, загружает сцены и запускает игру
+ */
 function main() {
     const game = new Game(['escape', 'C-c']);
 
     let hero: GameObject | null = null;
     let player = '';
 
+    /**
+     * Загрузка сцены игры.
+     * Функция генерирует карту, добавляет на нее героя, создает уровень игры и меняет текущую сцену игры на загруженный уровень
+     */
     const loadScene = () => {
         const [h, objs] = generateMap(50, 50, 50, 10);
         if (!h) {

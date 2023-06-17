@@ -1,6 +1,15 @@
 import { GameObject } from '../../../engine/elements/gameobject';
 
+/**
+ * Класс двери-выхода в игре
+ * @extends GameObject
+ */
 export class Exit extends GameObject {
+    /**
+     * Создает новый выход
+     * @param {number} x - Координата x
+     * @param {number} y - Координата y
+     */
     constructor([x, y]: [number, number]) {
         super(['exit', 'action']);
 

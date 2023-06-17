@@ -1,10 +1,19 @@
 import blessed, { Widgets } from 'blessed';
 import { GameObject } from './gameobject';
 
+/**
+ * Класс камеры
+ * @extends GameObject
+ */
 export class Camera extends GameObject {
     protected viewPort: Widgets.TextElement;
     protected viewPortBinded: boolean;
 
+    /**
+     * Создает экземпляр камеры
+     * @param {string[]} [tags] - Массив тегов
+     * @param {Widgets.TextOptions} [options] - Настройки viewport
+     */
     constructor(tags?: string[], options?: Widgets.TextOptions) {
         super(tags);
 
@@ -43,6 +52,10 @@ export class Camera extends GameObject {
         return this.viewPort;
     }
 
+    /**
+     * Обновляет размеры камеры на основе размеров видимой области
+     * @param {number} _ - Время, прошедшее с последнего обновления (не используется в этом методе)
+     */
     override update(_: number): void {
         if (typeof this.viewPort.width === 'number') {
             this.w = this.viewPort.width;

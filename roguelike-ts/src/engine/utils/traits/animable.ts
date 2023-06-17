@@ -1,4 +1,10 @@
 const animTrait = Symbol('anim');
+
+/**
+ * Декоратор, описывающий анимацию объекта
+ * @param {string[]} anim - Массив символов-спрайтов анимации
+ * @returns {Function} Декоратор
+ */
 export function Animatable(anim: string[]) {
     return function (
         _target: any,
@@ -20,6 +26,12 @@ export function Animatable(anim: string[]) {
     };
 }
 
+/**
+ * Повторяет символы определенное количество раз (используется для анимации)
+ * @param {string} sym - Символ
+ * @param {number} n - Количество повторений
+ * @returns {string[]} Массив повторенных символов
+ */
 export function repeat(sym: string, n: number) {
     const res: string[] = [];
     while (--n) {

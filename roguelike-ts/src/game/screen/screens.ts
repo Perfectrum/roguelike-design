@@ -5,6 +5,11 @@ import blessed from 'blessed';
 
 import fs from 'fs';
 
+
+/**
+ * Создает полноэкранный элемент сцены.
+ * @returns {Element} - Полноэкранный элемент сцены
+ */
 function fullScreen() {
     return $.scene()(
         $.box({ width: '100%', height: '100%' })($.camera({ width: '100%', height: '100%' })())
@@ -16,7 +21,18 @@ const helloText = fs.readFileSync(
     'utf-8'
 );
 
+/**
+ * Тип callback-функции, вызываемой после ввода имени.
+ * @param {string} s - Имя игрока
+ */
 type HelloResult = (s: string) => void;
+
+
+/**
+ * Создает экран приветствия.
+ * @param {HelloResult} next - Callback-функция, вызываемая после ввода имени
+ * @returns {object} - Экран приветствия
+ */
 function helloScreen(next: HelloResult) {
     const tb = blessed.textbox({
         width: 30,
@@ -41,6 +57,15 @@ function helloScreen(next: HelloResult) {
     );
 }
 
+
+/**
+ * Создает полноэкранный элемент интерфейса с пользовательской камерой.
+ * @param {Camera} cam - Пользовательская камера
+ * @param {string} player - Имя игрока
+ * @param {Function} started - Функция, вызываемая при запуске уровня игры
+ * @param {Function} result - Функция, вызываемая при событиях в игре
+ * @returns {object} - Полноэкранный элемент интерфейса с пользовательской камерой
+ */
 function fullScreenWithCustomCamera(
     cam: Camera,
     player: string,
@@ -79,11 +104,17 @@ function fullScreenWithCustomCamera(
     );
 }
 
+
 const gameOverText = fs.readFileSync(
     path.resolve(__dirname, '..', '..', '..', 'resources', 'gameOver.txt'),
     'utf-8'
 );
 
+/**
+ * Создает экран окончания игры.
+ * @param {string} player - Имя игрока
+ * @returns {object} - Экран окончания игры
+ */
 function gameOverScreen(player: string) {
     return $.scene()(
         $.box({ width: '100%', height: '100%', top: 0, left: 0, border: 'line' })(

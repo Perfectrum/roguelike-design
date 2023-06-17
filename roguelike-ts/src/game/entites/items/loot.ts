@@ -1,17 +1,38 @@
 import { GameObject } from '../../../engine/elements/gameobject';
 import { Hero } from '../hero';
 
+/**
+ * Интерфейс характеристик лута
+ */
 export interface LootCharacteristics {
     damage: number;
     armor: number;
 }
 
+/**
+ * Абстрактный класс, представляющий предмет
+ */
 export abstract class Loot extends GameObject {
     private chs: LootCharacteristics;
-    private name: string;
 
+    /**
+     * Название предмета
+     * @private
+     */
+    private name: string;
+    
+    /**
+     * Эффект, который предмет оказывает на героя
+     * @public
+     */
     public effect: (h: Hero) => void;
 
+    /**
+     * Создает экземпляр предмета
+     * @param {[number, number]} coordinates - Координаты
+     * @param {string} name - Название предмета
+     * @param {Partial<LootCharacteristics>} chs - Характеристики предмета (опционально)
+     */
     constructor([x, y]: [number, number], name: string, chs?: Partial<LootCharacteristics>) {
         super(['loot', 'action']);
 
