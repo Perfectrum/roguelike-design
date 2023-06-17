@@ -53,7 +53,36 @@ export class Scene {
         this.cameras.push(camera);
     }
 
-    /**
+  /**
+  * Возвращает массив ссылок на объекты в прямоугольной области
+  * @param {number} x - Координата x левого верхнего угла области поиска
+  * @param {number} y - Координата y левого верхнего угла области поиска
+  * @param {number} w - Ширина области поиска
+  * @param {number} h - Высота области поиска
+  * @returns {GameObject[]} - Массив объектов
+  */
+  private findObjsByCoords(x:number, y:number, w:number, h:number) : GameObject[] {
+
+        const testPoint = ([a, b]: [number, number]) => {
+            return a >= x && a <= x + w && b >= y && b <= y + h; 
+        }
+
+        const testObj = (obj:GameObject) => {
+            const [ ox, oy, ow, oh ] = obj.getDrawBox();
+            return testPoint([ox, oy]) || testPoint([ox + ow, oy]) || testPoint([ox, oy + oh]) || testPoint([ox + ow, oy + oh]);
+        }
+
+        const result: GameObject[] = [];
+        for (const object of this.objects) {
+           
+            if (testObj(object)) {
+                result.push(object);
+            }
+        }
+        return result;
+    }
+
+     /**
      * Добавляет объект на сцену
      * @param {GameObject} object - Игровой объект
      */
@@ -63,7 +92,8 @@ export class Scene {
             findUI: (id) => this.storage[id],
             remove: () => this.remove(object),
             sendSignal: (msg) => this.event(msg),
-            placeObject: (obj) => this.add(obj)
+            placeObject: (obj) => this.add(obj),
+            findObjectByCoords: (x, y, w, h) => this.findObjsByCoords(x, y, w, h)
         });
         this.objects.push(object);
         object.init();

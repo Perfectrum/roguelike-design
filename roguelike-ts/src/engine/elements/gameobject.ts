@@ -2,6 +2,7 @@ import { Widgets } from 'blessed';
 
 type UIElementFinder = (id: string) => Widgets.BlessedElement | undefined;
 type GameObjectFinder = (tag: string) => GameObject | undefined;
+type GameObjectCoordsFinder = (x:number, y:number, w:number, h:number) => GameObject[];
 
 /**
  * Класс, представляющий силу
@@ -50,6 +51,7 @@ export class Force {
  */
 interface SceneController {
     findObject: GameObjectFinder;
+    findObjectByCoords: GameObjectCoordsFinder;
     findUI: UIElementFinder;
     remove: () => void;
     sendSignal: (msg: string) => void;
@@ -79,6 +81,7 @@ export abstract class GameObject {
     public remove: () => void;
     protected sendSignal: (msg: string) => void;
     protected placeObject: (obj: GameObject) => void;
+    protected findObjectByCoords: GameObjectCoordsFinder;
 
     protected force: Force;
     protected willCollide: GameObject[];
@@ -108,6 +111,7 @@ export abstract class GameObject {
         this.remove = () => undefined;
         this.sendSignal = () => undefined;
         this.placeObject = () => undefined;
+        this.findObjectByCoords = () => [];
 
         this.force = new Force();
 
@@ -232,6 +236,7 @@ export abstract class GameObject {
         this.remove = controller.remove;
         this.sendSignal = controller.sendSignal;
         this.placeObject = controller.placeObject;
+        this.findObjectByCoords = controller.findObjectByCoords;
     }
 
     findCollideWith(tag: string) {
@@ -240,11 +245,13 @@ export abstract class GameObject {
 
     mockOther(other: GameObject | null) {
         if (!other) {
-            return;
+            return this;
         }
 
         this.x = other.getX();
         this.y = other.getY();
+
+        return this;
     }
 
     keyPressed(_: Widgets.Events.IKeyEventArg) {}

@@ -3,7 +3,11 @@ import blessed, { Widgets } from 'blessed';
 
 export type RenderFunc = (s: Scene) => void;
 
-export function createRender(screen: Widgets.Screen) {
+interface RenderScreenLike {
+    render():void;
+}
+
+export function createRender(screen: RenderScreenLike) {
     return function (scene: Scene) {
         const objs = scene.getViewPortEntities();
 

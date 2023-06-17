@@ -35,15 +35,23 @@ export class MapMeta {
         string,
         Record<string, (AbstractMobFactory: AbstractMobFactory, point: [number, number]) => Mob>
     >;
-    
+
+    /**
+     * Маркеры пространства
+     * @type {Set<string>}
+     */
+    public spaceMarks: Set<string>;
+
     /**
      * Конструктор создает метаданные карты по умолчанию
      */
     public constructor() {
+
+        this.spaceMarks = new Set(['#', '$']);
+
         this.heroMark = '@';
 
         this.envMapping = {
-            ' ': (point) => new Space(point),
             '#': (point) => new Wall(point),
             '&': (point) => new Exit(point)
         };

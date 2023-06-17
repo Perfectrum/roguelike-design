@@ -3,6 +3,7 @@ import { Game } from './engine/game';
 import { ObjectLinkedCamera } from './game/cameras/stickycam';
 import { generateMap } from './game/map/generator';
 import { screens } from './game/screen/screens';
+import blessed from 'blessed'
 
 
 /**
@@ -10,7 +11,7 @@ import { screens } from './game/screen/screens';
  * Она создает экземпляр игры, загружает сцены и запускает игру
  */
 function main() {
-    const game = new Game(['escape', 'C-c']);
+    const game = new Game(['escape', 'C-c'], blessed.screen({ smartCSR: true, debug: true }));
 
     let hero: GameObject | null = null;
     let player = '';

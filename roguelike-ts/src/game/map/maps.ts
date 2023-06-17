@@ -139,25 +139,20 @@ export function fromText(
             }
 
             if (char in meta.lootMapping) {
-                objs.splice(0, 0, new Space([x, y]));
                 objs.push(meta.lootMapping[char]([x, y]));
             }
 
             if ('fantasy' in meta.mobMappings && char in meta.mobMappings['fantasy']) {
-                objs.splice(0, 0, new Space([x, y]));
                 objs.push(meta.mobMappings['fantasy'][char](factories['fantasy'], [x, y]));
             }
             if ('apocalypse' in meta.mobMappings && char in meta.mobMappings['apocalypse']) {
-                objs.splice(0, 0, new Space([x, y]));
                 objs.push(meta.mobMappings['apocalypse'][char](factories['apocalypse'], [x, y]));
             }
             if ('cyberpunk' in meta.mobMappings && char in meta.mobMappings['cyberpunk']) {
-                objs.splice(0, 0, new Space([x, y]));
                 objs.push(meta.mobMappings['cyberpunk'][char](factories['cyberpunk'], [x, y]));
             }
 
             if (char == meta.heroMark) {
-                objs.push(new Space([x, y]));
                 hero = new Hero([x, y]);
             }
 
@@ -165,6 +160,31 @@ export function fromText(
         }
         ++y;
         x = 0;
+    }
+
+    const map : { [x:number] : { [y:number] : Space } } = { }
+    for (let y = 0; y < lines.length; ++y) {
+        for (let x = 0; x < lines[y].length; ++x) {
+            const char = lines[y][x];
+            if (meta.spaceMarks.has(char)) {
+                continue;
+            }
+
+            const s =  new Space([x, y]);
+
+            if (map[x - 1] && map[x - 1][y]) {
+                s.addNeighbour('left', map[x - 1][y]);
+            }
+            if (map[x] && map[x][y - 1]) {
+                s.addNeighbour('bottom', map[x][y - 1]);
+            }
+
+            objs.splice(0, 0, s);
+            if (!(x in map)) {
+                map[x] = { }
+            }
+            map[x][y] = s;
+        }
     }
 
     return [hero, objs];

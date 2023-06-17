@@ -1,4 +1,5 @@
 import { GameObject } from '../../../engine/elements/gameobject';
+import { Space } from '../env';
 import { Behavior, Panic, Ignore } from './behavior';
 
 /**
@@ -141,6 +142,16 @@ export abstract class Mob extends GameObject {
         return Math.abs(target.getX() - this.x) + Math.abs(target.getY() - this.y);
     }
 
+  /**
+     * Пытается увидеть указанный объект без учета в поля видимости
+     * @param {string} target Название целевого объекта
+     * @returns {GameObject} Увиденный объект или undefined, если цели
+     * с данным названием не найдена
+     */  
+  public lookForPure(target: string) {
+        return this.findObject(target);
+    }
+
     /**
      * Пытается увидеть указанный объект, если он в поле видимости
      * @param {string} target Название целевого объекта
@@ -157,6 +168,17 @@ export abstract class Mob extends GameObject {
             return obj;
         }
     }
+
+
+    /**
+    * Возвращает ссылку на объект пространства, в котором находится моб
+    * @returns {Space} - "Пол", на котором стоит моб
+    */
+    public getFloor()  {
+        const objs = this.findObjectByCoords(this.getX(), this.getY(), 0, 0);
+        return objs.find(x => x.containsTag('space'))! as Space;
+    }
+
 
     /**
      * Получение урона и смерть, если полученный урон фатален
