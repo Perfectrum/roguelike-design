@@ -3,9 +3,21 @@ import { Animatable, Forcable } from '../../engine/utils/traits';
 import { Hero } from './hero';
 import { Mob } from './mobs/mob';
 
+/**
+ * Класс, представляющий фаербол
+ */
 export class FireBall extends GameObject {
+    /**
+     * Указатель на игрока - обладателя фаербола
+     * @private
+     */
     private owner: Hero;
 
+    /**
+     * Создает экземпляр фаербола
+     * @param {[number, number, number, number]} coordinates - Координаты [x, y, dx, dy]
+     * @param {Hero} owner - Владелец фаербола
+     */
     constructor([x, y, dx, dy]: [number, number, number, number], owner: Hero) {
         super(['exit', 'action']);
 
@@ -23,6 +35,7 @@ export class FireBall extends GameObject {
         this.owner = owner;
     }
 
+    
     @Animatable(['*', 'o'])
     @Forcable(true)
     update(_: number): void {}

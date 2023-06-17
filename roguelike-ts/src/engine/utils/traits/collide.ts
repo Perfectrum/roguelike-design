@@ -1,5 +1,11 @@
 import { GameObject } from '../../elements/gameobject';
 
+/**
+ * Декоратор, указывающий что объект не может сталкиваться с другими объектами,
+ * имеющими определенные теги
+ * @param {string[]} tags - Массив тегов, с которыми объект не может сталкиваться
+ * @returns {Function} Декоратор
+ */
 export function CanNotCollideWith(tags: string[]) {
     return function (
         _target: any,

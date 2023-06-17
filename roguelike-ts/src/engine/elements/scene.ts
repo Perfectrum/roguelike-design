@@ -13,6 +13,9 @@ type ViewPortEntity = {
     content: string;
 };
 
+/**
+ * Класс сцены
+ */
 export class Scene {
     private objects: GameObject[];
     private cameras: Camera[];
@@ -21,6 +24,11 @@ export class Scene {
     public readonly init: () => void;
     public readonly event: (msg: string) => void;
 
+    /**
+     * Создает новый экземпляр сцены
+     * @param {() => void} [init] - Функция инициализации сцены
+     * @param {(msg: string) => void} [event] - Функция обработки событий сцены
+     */
     constructor(init?: () => void, event?: (msg: string) => void) {
         this.objects = [];
         this.cameras = [];
@@ -45,7 +53,15 @@ export class Scene {
         this.cameras.push(camera);
     }
 
-    private findObjsByCoords(x:number, y:number, w:number, h:number) : GameObject[] {
+  /**
+  * Возвращает массив ссылок на объекты в прямоугольной области
+  * @param {number} x - Координата x левого верхнего угла области поиска
+  * @param {number} y - Координата y левого верхнего угла области поиска
+  * @param {number} w - Ширина области поиска
+  * @param {number} h - Высота области поиска
+  * @returns {GameObject[]} - Массив объектов
+  */
+  private findObjsByCoords(x:number, y:number, w:number, h:number) : GameObject[] {
 
         const testPoint = ([a, b]: [number, number]) => {
             return a >= x && a <= x + w && b >= y && b <= y + h; 
@@ -66,6 +82,10 @@ export class Scene {
         return result;
     }
 
+     /**
+     * Добавляет объект на сцену
+     * @param {GameObject} object - Игровой объект
+     */
     add(object: GameObject) {
         object.bind({
             findObject: (tag) => this.objects.find((x) => x.containsTag(tag)),
@@ -101,6 +121,10 @@ export class Scene {
         return this.box;
     }
 
+    /**
+     * Возвращает массив сущностей порта просмотра
+     * @returns {[Widgets.BlessedElement, ViewPortEntity[]][]} - Массив сущностей порта просмотра
+     */
     getViewPortEntities(): [Widgets.BlessedElement, ViewPortEntity[]][] {
         const res: [Widgets.BlessedElement, ViewPortEntity[]][] = [];
 

@@ -1,5 +1,10 @@
 import { GameObject } from '../../elements/gameobject';
 
+/**
+ * Декоратор, указывающий что на объект может вздействовать сила
+ * @param {boolean} isConst - Флаг, указывающий, является ли сила постоянной
+ * @returns {Function} Декоратор
+ */
 export function Forcable(isConst = false) {
     return function (
         _target: any,

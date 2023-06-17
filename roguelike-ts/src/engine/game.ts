@@ -12,6 +12,9 @@ export interface ScreenLike {
     render():void;
 }
 
+/**
+ * Класс игры
+ */
 export class Game {
     private screen;
     private gameLoop: null | NodeJS.Timer;
@@ -26,10 +29,17 @@ export class Game {
 
     private scheduledBuisness: (() => void)[];
 
+    /**
+     * Создает новую игру
+     * @constructor
+     * @param {string[]} stopSymbols - Комбинация клавиш для выхода из игры
+     * @param {string} title - Заголовок окна
+     */
     constructor(stopSymbols: string[], screen:ScreenLike, title = 'Rougelike') {
         this.screen = screen /* blessed.screen({
             smartCSR: true,
         }); */
+
         this.screen.title = title;
 
         this.screen.key(stopSymbols, () => {
@@ -52,6 +62,10 @@ export class Game {
         this.controllEvents();
     }
 
+    /**
+     * Устанавливает обработчик нажатия клавиш
+     * @private
+     */
     private controllEvents() {
         this.screen.on('keypress', (_, key) => {
             for (const obj of this.currentScene.getObjects()) {
@@ -60,6 +74,10 @@ export class Game {
         });
     }
 
+    /**
+     * Выполняет запланированные задачи из очереди scheduledBuisness
+     * @private
+     */
     private doGLobalWork() {
         while (this.scheduledBuisness.length) {
             const job = this.scheduledBuisness.shift();
@@ -69,12 +87,22 @@ export class Game {
         }
     }
 
+    /**
+     * Реализует игровую логику
+     * @private
+     * @param {number} dt - Время, прошедшее с последнего обновления
+     */
     private run(dt: number) {
         this.calc(this.currentScene, dt, this.ticks);
         this.render(this.currentScene);
         this.doGLobalWork();
     }
 
+    /**
+     * Добавляет обновление сцены в очередь задач
+     * @private
+     * @param {Scene} scene - Новая сцена игры.
+     */
     useScene(scene: Scene) {
         const job = () => {
             this.screen.remove(this.currentScene.getBox());
@@ -91,6 +119,9 @@ export class Game {
         this.scheduledBuisness.push(job);
     }
 
+    /**
+     * Запускает игру
+     */
     start() {
         if (this.gameLoop === null) {
             this.time = performance.now();
@@ -104,14 +135,15 @@ export class Game {
         }
     }
 
+    /**
+     * Останавливает игру
+     */
     stop() {
         if (this.gameLoop !== null) {
             clearInterval(this.gameLoop);
             this.gameLoop = null;
         }
     }
-
-    ///////////////////////////////////////////////////////////////////////////////
 
     changeScene(scene: Scene) {
         this.useScene(scene);

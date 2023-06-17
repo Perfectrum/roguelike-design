@@ -1,7 +1,20 @@
 import { Loot, LootCharacteristics } from './loot';
 
+/**
+ * Тип, определяющий интенсивность лечения
+ */
 export type HealSize = 'Small' | 'Medium' | 'Big';
+
+/**
+ * Класс, представляющий лечащий предмет
+ */
 export class Heal extends Loot {
+    /**
+     * Создает экземпляр лечения
+     * @param {[number, number]} point - Координаты предмета
+     * @param {HealSize} size - Размер лечения (по умолчанию 'Small')
+     * @param {Partial<LootCharacteristics>} chs - Характеристики предмета (необязательно)
+     */
     constructor(
         point: [number, number],
         size: HealSize = 'Small',

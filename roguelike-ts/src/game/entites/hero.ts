@@ -7,6 +7,24 @@ import { Exit } from './env/exit';
 import { Mob } from './mobs/mob';
 import { FireBall } from './fireball';
 
+/**
+ * Класс героя, которым управляет игрок
+ * @class
+ * @extends GameObject
+ * @property {number} hp - Здоровье
+ * @property {number} xp - Опыт
+ * @property {number} level - Уровень
+ * @property {number} damage - Урон
+ * @property {number} armor - Показатель брони
+ * @property {number} fireballs - Количество фаерболов у героя
+ * @property {Object} statistics - Статистика игры
+ * @property {number} statistics.levels - Количество пройденных уровней
+ * @property {number} statistics.mobs - Количество убитых монстров
+ * @property {number} statistics.score - Общий счет героя
+ * @property {Record<LootPlace, WearsLoot | null>} inventory - Инвентарь героя
+ * @constructor
+ * @param {number[]} - Координаты героя
+ */
 export class Hero extends GameObject {
     private hp: number;
     private xp: number;
@@ -21,6 +39,14 @@ export class Hero extends GameObject {
         score: number;
     };
 
+    /**
+     * Инвентарь
+     * @type {Object}
+     * @property {WearsLoot | null} head - Предмет на голове
+     * @property {WearsLoot | null} body - Предмет на теле
+     * @property {WearsLoot | null} rightHand - Предмет в правой руке
+     * @property {WearsLoot | null} leftHand - Предмет в левой руке
+     */
     private inventory: Record<LootPlace, WearsLoot | null>;
 
     constructor([x, y]: [number, number]) {
@@ -59,6 +85,9 @@ export class Hero extends GameObject {
         };
     }
 
+    /**
+     * Инициализирует героя
+     */
     init() {
         this.changeHpUI();
         this.changeXpUI();
@@ -68,10 +97,20 @@ export class Hero extends GameObject {
         this.changeStatisticsUI();
     }
 
+    /**
+     * Возвращает чистый урон героя, с учетом уровня
+     * @returns {number} - Чистый урон героя
+     * @private
+     */
     private getPureDamage() {
         return this.damage + 2 * (this.level - 1);
     }
 
+    /**
+     * Возвращает добавочный урон предметов из инвентаря
+     * @returns {number} - Урон героя
+     * @private
+     */
     private getInvetoryDamage() {
         return Object.values(this.inventory)
             .filter((x) => x !== null)
@@ -79,14 +118,27 @@ export class Hero extends GameObject {
             .reduce((a, x) => a + x, 0);
     }
 
+    /**
+     * Возвращает итоговый урон героя
+     * @returns {number} - Общий урон героя
+     * @private
+     */
     private getDamage() {
         return this.getPureDamage() + this.getInvetoryDamage();
     }
 
+    /**
+     * Возвращает чистый показатель брони героя, с учетом уровня
+     * @private 
+     */
     private getPureArmor() {
         return this.armor + 5 * (this.level - 1);
     }
 
+    /**
+     * Возвращает добавочный показатель брони предметов из инвенторя
+     * @private
+     */
     private getInventoryArmor() {
         return Object.values(this.inventory)
             .filter((x) => x !== null)
@@ -94,14 +146,27 @@ export class Hero extends GameObject {
             .reduce((a, x) => a + x, 0);
     }
 
+    /**
+     * Возвращает результирующий показатель брони
+     * @private
+     */
     private getArmor() {
         return this.getPureArmor() * this.getInventoryArmor();
     }
 
+    /**
+     * Возвращает показатель сопротивления
+     * @private
+     */
     private getResistKoefficient() {
         return 1 - (2 / (1 + Math.exp((-6 * this.getArmor()) / 200)) - 1);
     }
 
+    /**
+     * Переопределение метода обработки событий нажатия клавиш
+     * @param {Widgets.Events.IKeyEventArg} key - Объект, содержащий информацию о нажатой клавише.
+     * @returns {void}
+     */
     override keyPressed(key: Widgets.Events.IKeyEventArg): void {
         if (!key.shift) {
             if (key.name === 'w') {
@@ -175,6 +240,10 @@ export class Hero extends GameObject {
         }
     }
 
+    /**
+     * Добавляет опыт и уровень персонажа, обновляет эти данные в объекте статистики и на интерфейсе
+     * @param {number} xps - Количество очков опыта для добавления.
+     */
     giveXp(xps: number) {
         this.xp += xps;
         if (this.xp > 100) {
@@ -187,6 +256,9 @@ export class Hero extends GameObject {
         this.changeDmgNArm();
     }
 
+    /**
+     * Обновляет значения урона и брони
+     */
     private changeDmgNArm() {
         this.findUI('dmgTitle')?.setContent(
             `{bold}DMG{/bold} | ${this.getPureDamage()} (+${this.getInvetoryDamage()})`
@@ -196,6 +268,9 @@ export class Hero extends GameObject {
         );
     }
 
+    /**
+     * Обновляет информацию о статистике в интерфейсе
+     */
     private changeStatisticsUI() {
         this.findUI('mobsLabel')?.setContent(`$ MOBS: ${this.statistics.mobs.toFixed(0)}`);
         this.findUI('levelsLabel')?.setContent(
@@ -206,6 +281,9 @@ export class Hero extends GameObject {
         );
     }
 
+    /**
+     * Обновляет показатель здоровья в интерфейсе
+     */
     private changeHpUI() {
         let hps = '';
         const items = Math.round((this.hp / 100) * 10);
@@ -230,6 +308,9 @@ export class Hero extends GameObject {
         );
     }
 
+    /**
+     * Обновляет инвениарь в интерфейсе
+     */
     private changeInventory() {
         let text = '';
         for (const [key, val] of Object.entries(this.inventory)) {
@@ -243,10 +324,16 @@ export class Hero extends GameObject {
         this.findUI('inventoryDisplay')?.setContent(text);
     }
 
+    /**
+     * Обновляет количество фаерболов в интерфейсе
+     */
     private changeFireBallDisplay() {
         this.findUI('fireballsDisplay')?.setContent(`Fireballs ${this.fireballs}`);
     }
 
+    /**
+     * Обновляет значение опыта в интерфейсе
+     */
     private changeXpUI() {
         let xps = '';
         const items = Math.round((this.xp / 100) * 10);
@@ -264,6 +351,12 @@ export class Hero extends GameObject {
         this.findUI('xpTitle')?.setContent(`HERO LEVEL => ${this.level} <=`);
     }
 
+    /**
+     * Отрисовывает полоску здоровья героя
+     * @param {number} maxHp - Максимальное количество здоровья
+     * @param {number} current - Текущее количество здоровья
+     * @returns {string} - Отрисованная полоска здоровья
+     */
     private drawHpBar(maxHp: number, current: number) {
         let hps = '{red-fg}';
         const items = Math.round((current / maxHp) * 10);
@@ -279,6 +372,10 @@ export class Hero extends GameObject {
         return `[${hps}]`;
     }
 
+    /**
+     * Уменьшает количество здоровья игрока
+     * @param {number} dhp - Значение урона
+     */
     takeDamage(dhp: number) {
         this.hp = Math.max(0, this.hp - dhp * this.getResistKoefficient());
         if (this.hp === 0) {
@@ -287,11 +384,19 @@ export class Hero extends GameObject {
         this.changeHpUI();
     }
 
+    /**
+     * Увеличивает количество здоровья игрока на указанное значение
+     * @param {number} dhp - Количество восстановленного здоровья
+     */
     heal(dhp: number) {
         this.hp = Math.min(100, this.hp + dhp);
         this.changeHpUI();
     }
 
+    /**
+     * Экипирует предмет в инвентарь игрока
+     * @param {WearsLoot} loot - Полученный предмет
+     */
     equip(loot: WearsLoot) {
         const oldLoot = this.inventory[loot.getPlace()];
         this.inventory[loot.getPlace()] = loot;
@@ -303,6 +408,10 @@ export class Hero extends GameObject {
         this.changeInventory();
     }
 
+    /**
+     * Увеличивает количество фаерболов у игрока на указанное значение
+     * @param {number} count - Количество полученных фаерболов
+     */
     giveFireBall(count: number) {
         this.fireballs += count;
         this.changeFireBallDisplay();

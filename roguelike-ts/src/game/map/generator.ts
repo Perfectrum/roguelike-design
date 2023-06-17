@@ -4,6 +4,14 @@ import { CyberpunkMobFactory } from '../entites/mobs/cyberpunk/cyberpunkMobFacto
 import { FantasyMobFactory } from '../entites/mobs/fantasy/fantasyMobFactory';
 import { fromText } from './maps';
 
+/**
+ * Интерфейс прямоугольной области карты
+ * @typedef {Object} Box
+ * @property {number} x - Координата x верхнего левого угла
+ * @property {number} y - Координата y верхнего левого угла
+ * @property {number} w - Ширина
+ * @property {number} h - Высота
+ */
 interface Box {
     x: number;
     y: number;
@@ -11,14 +19,32 @@ interface Box {
     h: number;
 }
 
+/**
+ * Интерфейса дерева, описывающего структуру уровня
+ * @typedef {Object} Tree
+ * @property {Box} content - Прямоугольник - содержимое узла
+ * @property {Tree | null} left - Левый дочерний узел
+ * @property {Tree | null} right - Правый дочерний узел
+ */
 interface Tree {
     content: Box;
     left: Tree | null;
     right: Tree | null;
 }
 
+/**
+ * Минимальный размер комнаты
+ * @constant {number}
+ */
 const MIN_ROOM = 15;
 
+/**
+ * Создает дерева с заданным содержимым
+ * @param {Box} content - Содержимое узла
+ * @param {Tree | null} left - Левый дочерний узел
+ * @param {Tree | null} right - Правый дочерний узел
+ * @returns {Tree} - Созданное дерево
+ */
 function createTree(content: Box, left: Tree | null = null, right: Tree | null = null): Tree {
     return {
         content,
@@ -27,6 +53,11 @@ function createTree(content: Box, left: Tree | null = null, right: Tree | null =
     };
 }
 
+/**
+ * Делит узел надвое
+ * @param {Tree} node - Узел, который нужно разделить
+ * @returns {Tree[]} - Массив из двух созданных узлов
+ */
 function splitNode(node?: Tree): Tree[] {
     if (!node) {
         return [];
@@ -93,6 +124,11 @@ function splitNode(node?: Tree): Tree[] {
     }
 }
 
+/**
+ * Возвращает массив прямоугольников-листьев дерева
+ * @param {Tree | null} tree - Дерево
+ * @returns {Box[]} - Массив прямоугольников-листьев
+ */
 function getLeafs(tree: Tree | null): Box[] {
     if (!tree) {
         return [];
@@ -105,6 +141,11 @@ function getLeafs(tree: Tree | null): Box[] {
     return ([] as Box[]).concat(getLeafs(tree.left)).concat(getLeafs(tree.right));
 }
 
+/**
+ * Создает массив прямоугольников-дорог между узлами дерева
+ * @param {Tree} node - Узел дерева
+ * @returns {Box[]} - Массив прямоугольников дорог
+ */
 function makeRoades(node: Tree): Box[] {
     if (!node.left || !node.right) {
         return [];
@@ -152,6 +193,13 @@ function selectRoom(room: Box): Box {
     };
 }
 
+/**
+ * Генерирует игровую карту
+ * @param {number} w - Ширина карты
+ * @param {number} h - Высота карты
+ * @param {number} lootAmount - Количество лута на карте
+ * @param {number} mobAmount - Количество мобов на карте
+ */
 export function generateMap(w: number, h: number, lootAmount: number, mobAmount: number) {
     const t = createTree({ x: 0, y: 0, w, h });
     const queue = [t];

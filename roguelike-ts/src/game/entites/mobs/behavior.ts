@@ -1,11 +1,39 @@
 import { Mob } from '../mobs/mob';
 import { Hero } from '../hero';
 
+/**
+ * Абстрактный класс, представляющий поведение моба с помощью паттерна Состояние
+ * @abstract
+ */
 export abstract class Behavior {
+    /**
+     * Моб, управляемый поведением
+     * @type {Mob}
+     * @protected
+     */
     protected mob: Mob;
+
+    /**
+     * Условие, определяющее переключение поведения
+     * @type {(mob: Mob) => boolean}
+     * @protected
+     */
     protected condition: (mob: Mob) => boolean;
+
+    /**
+     * Следующее состояние поведения
+     * @type {Behavior}
+     * @protected
+     */
     protected nextState: Behavior;
 
+    /**
+     * Создает новый экземпляр поведения
+     * @param {Mob} mob - Моб, управляемый поведением
+     * @param {(mob: Mob) => boolean} condition - Условие, определяющее, должно ли поведение переключиться на следующее
+     * @param {Behavior} [nextState] - Следующее состояние поведения (опционально). Если следующее поведение не передано,
+     * то при срабатывании условия моб перейдет в деволтное состояние
+     */
     public constructor(mob: Mob, condition: (mob: Mob) => boolean, nextState?: Behavior) {
         this.mob = mob;
         this.condition = condition;
@@ -19,6 +47,10 @@ export abstract class Behavior {
     public abstract update(t: number): void;
 }
 
+/**
+ * Аггресивное поведение, при котором моб охраняет точку, на которой стоит и
+ * нападает при приближении героя, и возвращается при удалении
+ */
 export class Agressive extends Behavior {
     public update(_: number) {
         const hero = this.mob.lookFor('hero');
@@ -54,6 +86,9 @@ export class Agressive extends Behavior {
     }
 }
 
+/**
+ * Поведение, при котором моб атакует героя при появлении того в поле зрения
+ */
 export class Attack extends Behavior {
     public update(_: number): void {
         const hero = this.mob.lookFor('hero');
@@ -81,6 +116,9 @@ export class Attack extends Behavior {
     }
 }
 
+/**
+ * Сконфуженное поведение при котором моб перемещается в случайном направлении
+ */
 export class Confuse extends Behavior {
     public update(_: number) {
         if (Math.random() > 0.1) {
@@ -93,6 +131,9 @@ export class Confuse extends Behavior {
     }
 }
 
+/**
+ * Поведение, при котором моб держится на расстоянии от игрока
+ */
 export class KeepDistance extends Behavior {
     public update(_: number) {
         const hero = this.mob.lookFor('hero');
@@ -131,6 +172,7 @@ export class KeepDistance extends Behavior {
     }
 }
 
+/** Поведение, при котором моб убегает от игрока */
 export class Panic extends Behavior {
     public update(_: number): void {
         const hero = this.mob.lookFor('hero');
@@ -165,6 +207,7 @@ export class Panic extends Behavior {
     }
 }
 
+/** Поведение, при котором моб игнорирует игрока */
 export class Ignore extends Behavior {
     public update(_: number): void {
         if (this.condition(this.mob)) {

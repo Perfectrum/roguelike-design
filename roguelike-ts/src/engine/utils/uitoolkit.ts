@@ -2,6 +2,7 @@ import blessed, { Widgets } from 'blessed';
 import { Camera } from '../elements/camera';
 import { Scene } from '../elements/scene';
 
+
 interface ToolKitItem {
     elements: Widgets.BlessedElement[];
     cameras: Camera[];

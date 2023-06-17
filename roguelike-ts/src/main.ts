@@ -5,12 +5,21 @@ import { generateMap } from './game/map/generator';
 import { screens } from './game/screen/screens';
 import blessed from 'blessed'
 
+
+/**
+ * Точка входа в программу
+ * Она создает экземпляр игры, загружает сцены и запускает игру
+ */
 function main() {
     const game = new Game(['escape', 'C-c'], blessed.screen({ smartCSR: true, debug: true }));
 
     let hero: GameObject | null = null;
     let player = '';
 
+    /**
+     * Загрузка сцены игры.
+     * Функция генерирует карту, добавляет на нее героя, создает уровень игры и меняет текущую сцену игры на загруженный уровень
+     */
     const loadScene = () => {
         const [h, objs] = generateMap(50, 50, 50, 10);
         if (!h) {

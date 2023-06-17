@@ -4,10 +4,25 @@ type UIElementFinder = (id: string) => Widgets.BlessedElement | undefined;
 type GameObjectFinder = (tag: string) => GameObject | undefined;
 type GameObjectCoordsFinder = (x:number, y:number, w:number, h:number) => GameObject[];
 
+/**
+ * Класс, представляющий силу
+ * @class
+ */
 export class Force {
+    /**
+     * Координаты приложения силы
+     * @type {number}
+     */
     public x: number;
     public y: number;
 
+    /**
+     * Создает новый экземпляр класса
+     * @constructor
+     * @param {Object} [params] - Список объектов-параметров
+     * @param {number} [params.x=0] - Координата x
+     * @param {number} [params.y=0] - Координата y
+     */
     constructor(params?: { x?: number; y?: number }) {
         this.x = params?.x || 0;
         this.y = params?.y || 0;
@@ -30,6 +45,10 @@ export class Force {
     }
 }
 
+/**
+ * Интерфейс контроллера сцены.
+ * @interface
+ */
 interface SceneController {
     findObject: GameObjectFinder;
     findObjectByCoords: GameObjectCoordsFinder;
@@ -39,6 +58,11 @@ interface SceneController {
     placeObject: (obj: GameObject) => void;
 }
 
+/**
+ * Абстрактный класс игрового объекта
+ * @abstract
+ * @class
+ */
 export abstract class GameObject {
     protected x: number;
     protected y: number;
@@ -67,6 +91,10 @@ export abstract class GameObject {
 
     protected rate: number;
 
+    /**
+     * Создает новый экземпляр игрового объекта
+     * @param {string[]} [tags] - Теги объекта
+     */
     protected constructor(tags?: string[]) {
         this.x = 0;
         this.y = 0;
@@ -168,6 +196,10 @@ export abstract class GameObject {
         return this.contentBraces;
     }
 
+    /**
+     * Возвращает содержимое объекта
+     * @returns {string} Содержимое объекта
+     */
     getContent() {
         let content = '';
 
@@ -194,6 +226,10 @@ export abstract class GameObject {
         return this.tags.includes(tag);
     }
 
+    /**
+     * Связывает объект с контроллером сцены
+     * @param {SceneController} controller - Контроллер сцены
+     */
     bind(controller: SceneController) {
         this.findObject = controller.findObject;
         this.findUI = controller.findUI;

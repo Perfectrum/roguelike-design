@@ -1,12 +1,21 @@
 import { GameObject } from '../../../engine/elements/gameobject';
-
+    
 type NeighbourSide = 'top' | 'bottom' | 'left' | 'right';
 
+/**
+ * Класс пустого пространства в игре
+ * @extends GameObject
+ */
 export class Space extends GameObject {
 
     neighbours:[Space | null, Space | null, Space | null, Space | null]
-
-    constructor([x, y]: [number, number]) {
+  
+    /**
+    * Создает новый экземпляр пустого пространства
+    * @param {number} x - Координата x
+    * @param {number} y - Координата y
+    */    
+      constructor([x, y]: [number, number]) {
         super(['space']);
 
         this.neighbours = [null, null, null, null];
