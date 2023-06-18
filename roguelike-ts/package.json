@@ -1,0 +1,36 @@
+{
+  "name": "dnmse",
+  "version": "0.8.0",
+  "description": "Dangeon & ITMO MSE -- software design roguelike game project",
+  "scripts": {
+    "beautify": "npm run format && npm run lint",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --config .prettierrc.json 'src/**/*.ts' --write",
+    "dev": "tsc -w",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "bin": "build/bin.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "blessed": "^0.1.81"
+  },
+  "devDependencies": {
+    "@types/blessed": "^0.1.22",
+    "@types/jest": "^29.5.2",
+    "@types/node": "^18.13.0",
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
+    "eslint": "^8.34.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^29.5.0",
+    "prettier": "^2.8.4",
+    "ts-jest": "^29.1.0",
+    "typedoc": "^0.24.8",
+    "typescript": "^5.0.4"
+  }
+}
