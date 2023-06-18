@@ -3,7 +3,15 @@ import { Animatable, CanNotCollideWith, Forcable } from '../../../../engine/util
 import { repeat } from '../../../../engine/utils/traits/animable';
 import { Attack } from '../behavior';
 
+/**
+ * Класс моба зомби, стиля апокалипсиса,
+ * имеет агрессивное поведение
+ */
 export class Zombie extends Mob {
+    /**
+     * Создаёт экземпляр зомби
+     * @param point место где создать экзмепляр
+     */
     constructor(point: [number, number]) {
         super(point, 'Zombie');
         this.behaviorState = new Attack(this, (_: Mob) => false);

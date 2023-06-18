@@ -4,6 +4,9 @@ import { KillMachine } from './killMachine';
 import { CowardHacker } from './cowardHacker';
 import { Drone } from './drone';
 
+/**
+ * Класс-фабрика для мобов стиля киберпанк
+ */
 export class CyberpunkMobFactory extends AbstractMobFactory {
     static createMobSign() {
         const mobTypes: string[] = ['K', 'H', 'D'];

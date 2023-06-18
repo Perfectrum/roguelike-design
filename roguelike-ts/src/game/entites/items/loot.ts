@@ -61,7 +61,11 @@ export abstract class Loot extends GameObject {
     getArmor() {
         return this.chs.armor;
     }
-
+    /**
+     * Возвращает описание лута, исходя из того атакующий это предмет
+     * иди защитный. 
+     * @returns {string} text  - текст-описание
+     */
     getDescription() {
         let text = '[ ';
         if (this.chs.damage) {

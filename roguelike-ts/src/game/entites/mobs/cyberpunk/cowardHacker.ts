@@ -3,7 +3,15 @@ import { Animatable, CanNotCollideWith, Forcable } from '../../../../engine/util
 import { repeat } from '../../../../engine/utils/traits/animable';
 import { Panic } from '../behavior';
 
+/**
+ * Класс моба трусливого хакера, стиля киберпанк,
+ * имеет поведение случайного блуждания
+ */
 export class CowardHacker extends Mob {
+    /**
+     * Создаёт экземпляр трусливого хакера
+     * @param point - место где создать экземпляр
+     */
     constructor(point: [number, number]) {
         super(point, 'CowardHacker');
         this.behaviorState = new Panic(this, (_: Mob) => false);

@@ -7,6 +7,11 @@ interface RenderScreenLike {
     render():void;
 }
 
+/**
+ * Создаёт функцию отрисовки экрана
+ * @param screen - переданный экзепляр экрана
+ * @returns функцию отрисовки
+ */
 export function createRender(screen: RenderScreenLike) {
     return function (scene: Scene) {
         const objs = scene.getViewPortEntities();

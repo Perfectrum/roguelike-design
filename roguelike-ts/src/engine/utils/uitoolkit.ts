@@ -2,7 +2,9 @@ import blessed, { Widgets } from 'blessed';
 import { Camera } from '../elements/camera';
 import { Scene } from '../elements/scene';
 
-
+/**
+ * Интерфейс тулкита для UI
+ */
 interface ToolKitItem {
     elements: Widgets.BlessedElement[];
     cameras: Camera[];

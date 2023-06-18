@@ -52,6 +52,10 @@ function markCollision(collisions: GameObject[][], willCollide: boolean) {
     }
 }
 
+/**
+ * Создаёт функции физики объектов
+ * @returns функцию физики объектов
+ */
 export function createPhysics() {
     return function (scene: Scene, dt: number, ticks: number) {
         const objs = scene.getPhysicsObjects();

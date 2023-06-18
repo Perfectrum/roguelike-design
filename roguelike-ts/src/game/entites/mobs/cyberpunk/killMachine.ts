@@ -3,7 +3,16 @@ import { Animatable, CanNotCollideWith, Forcable } from '../../../../engine/util
 import { repeat } from '../../../../engine/utils/traits/animable';
 import { Attack, Agressive } from '../behavior';
 
+
+/**
+ * Класс моба машина убийств, стиля киберпанк,
+ * имеет агрессивное поведение
+ */
 export class KillMachine extends Mob {
+    /**
+     * Создаёт экземпляр машина убийств
+     * @param point - место где создать экземпляр
+     */
     constructor(point: [number, number]) {
         super(point, 'KillMachine');
         this.damage = 3;

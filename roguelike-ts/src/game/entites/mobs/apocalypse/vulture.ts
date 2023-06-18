@@ -3,7 +3,15 @@ import { Animatable, CanNotCollideWith, Forcable } from '../../../../engine/util
 import { repeat } from '../../../../engine/utils/traits/animable';
 import { KeepDistance } from '../behavior';
 
+/**
+ * Класс моба стервятника, стиля апокалипсиса,
+ * имеет поведение держания дистанции
+ */
 export class Vulture extends Mob {
+    /**
+     * Создаёт экземпляр стервятника
+     * @param point место где создать экзмепляр
+     */
     constructor(point: [number, number]) {
         super(point, 'vulture');
         this.behaviorState = new KeepDistance(this, (_: Mob) => false);

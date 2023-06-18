@@ -4,6 +4,9 @@ import { Zombie } from './zombie';
 import { MadMonk } from './madMonk';
 import { Vulture } from './vulture';
 
+/**
+ * Класс-фабрика для мобов стиля апокалипсис
+ */
 export class ApocalypseMobFactory extends AbstractMobFactory {
     static createMobSign() {
         const mobTypes: string[] = ['Z', 'V', 'M'];

@@ -3,7 +3,15 @@ import { Animatable, CanNotCollideWith, Forcable } from '../../../../engine/util
 import { repeat } from '../../../../engine/utils/traits/animable';
 import { Attack, KeepDistance } from '../behavior';
 
+/**
+ * Класс моба гарпии, стиля фентези,
+ * имеет поведение держания дистанции
+ */
 export class Harpy extends Mob {
+    /**
+     * Создаёт экземпляр гарпии
+     * @param point место где создать экзмепляр
+     */
     constructor(point: [number, number]) {
         super(point, 'Harpy');
         this.visionRange = 15;

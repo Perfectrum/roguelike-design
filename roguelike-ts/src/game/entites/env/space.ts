@@ -34,6 +34,12 @@ export class Space extends GameObject {
         return `space_${this.x}_${this.y}`;
     }
 
+    /**
+     * Добавить это пустое место как соседа с указанной стороны
+     * указанному месту
+     * @param side  {NeighbourSide}
+     * @param n {Space}
+     */
     addNeighbour(side: NeighbourSide, n:Space) {
         if (side === 'top') {
             n.neighbours[2] = this;

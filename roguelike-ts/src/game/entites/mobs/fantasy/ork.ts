@@ -3,7 +3,15 @@ import { Animatable, CanNotCollideWith, Forcable } from '../../../../engine/util
 import { repeat } from '../../../../engine/utils/traits/animable';
 import { Agressive, Panic } from '../behavior';
 
+/**
+ * Класс моба орк, стиля фентези,
+ * имеет агрессивное поведение
+ */
 export class Ork extends Mob {
+    /**
+     * Создаёт экземпляр орка (видимо именно ваховского)
+     * @param point место где создать экзмепляр
+     */
     constructor(point: [number, number]) {
         super(point, 'Ork');
 

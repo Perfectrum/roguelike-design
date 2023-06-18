@@ -3,7 +3,15 @@ import { Animatable, CanNotCollideWith, Forcable } from '../../../../engine/util
 import { repeat } from '../../../../engine/utils/traits/animable';
 import { Confuse, Panic } from '../behavior';
 
+/**
+ * Класс моба безумный монах, стиля апокалипсиса,
+ * имеет поведение случайного блуждания
+ */
 export class MadMonk extends Mob {
+    /**
+     * Создаёт экземпляр безумного монаха
+     * @param point - место где создать экземпляр
+     */
     constructor(point: [number, number]) {
         super(point, 'MadMonk');
         this.behaviorState = new Confuse(
